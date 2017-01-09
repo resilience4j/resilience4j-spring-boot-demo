@@ -1,0 +1,24 @@
+spring:
+    application.name: javaslang-circuitbreaker-demo
+    jackson.serialization.indent_output: true
+
+server:
+    port: 9080
+
+management:
+    contextPath: /management
+    add-application-context-header: false
+
+info:
+    name: ${spring.application.name}
+    description: javaslang-circuitbreaker demo
+    environment: ${spring.profiles.active}
+    version: 0.0.1
+
+circuitbreaker:
+    backends:
+        testBackend:
+            ringBufferSizeInClosedState: 5
+            ringBufferSizeInHalfOpenState: 3
+            waitInterval: 5000
+            failureRateThreshold: 25
