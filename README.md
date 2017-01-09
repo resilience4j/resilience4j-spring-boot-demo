@@ -1,7 +1,6 @@
-# javaslang-circuitbreaker-demo
-javaslang-circuitbreaker DEMO
+# Spring Boot Demo of javaslang-circuitbreaker
 
-This is a Spring Boot demo which shows how to use the [javaslang-circuitbreaker](https://github.com/RobWin/javaslang-circuitbreaker).
+This is a demo which shows how to use the [javaslang-circuitbreaker](https://github.com/RobWin/javaslang-circuitbreaker) in a Spring Boot application.
 
 The demo shows how to use a Spring AOP Aspect and a custom `CircuitBreaker` annotation to protect all public methods of a class.
 
