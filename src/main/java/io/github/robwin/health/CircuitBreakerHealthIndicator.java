@@ -14,7 +14,7 @@ import org.springframework.boot.actuate.health.HealthIndicator;
 
 import java.util.Optional;
 
-public class CustomHealthIndicator implements HealthIndicator {
+public class CircuitBreakerHealthIndicator implements HealthIndicator {
 
     private static final String FAILURE_RATE = "failureRate";
     private static final String FAILURE_RATE_THRESHOLD = "failureRateThreshold";
@@ -25,7 +25,7 @@ public class CustomHealthIndicator implements HealthIndicator {
     private CircularEventConsumer<CircuitBreakerOnErrorEvent> circularEventConsumer;
     private CircuitBreaker circuitBreaker;
 
-    public CustomHealthIndicator(CircuitBreakerRegistry circuitBreakerRegistry, CircuitBreakerProperties circuitBreakerProperties, String backendName) {
+    public CircuitBreakerHealthIndicator(CircuitBreakerRegistry circuitBreakerRegistry, CircuitBreakerProperties circuitBreakerProperties, String backendName) {
         this.circularEventConsumer = new CircularEventConsumer<>(5);
         this.circuitBreaker = circuitBreakerRegistry.circuitBreaker(backendName, () -> circuitBreakerProperties.circuitBreakerConfig(backendName));
         circuitBreaker.getEventStream()

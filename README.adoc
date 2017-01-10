@@ -14,7 +14,7 @@ public class BackendAConnector implements Connector {
 }
 ----
 
-Spring Boot Actuator health information can be used to check the status of your running application. It is often used by monitoring software to alert someone if a production system has serious issued. This demo publishes the status and metrics of all CircuitBreakers via a custom HealthIndicator. A closed CircuitBreaker state is mapped to UP, an open state to DOWN and a half-open state to UNKNOWN.
+Spring Boot Actuator health information can be used to check the status of your running application. It is often used by monitoring software to alert someone if a production system has serious issued. This demo publishes the status and metrics of all CircuitBreakers via a custom `CircuitBreakerHealthIndicator`. A closed CircuitBreaker state is mapped to UP, an open state to DOWN and a half-open state to UNKNOWN.
 For example:
 
 [source,json]
