@@ -23,6 +23,7 @@ info:
     version: 0.0.1
 
 circuitbreaker:
+    eventBufferSize: 100
     backends:
         backendA:
             ringBufferSizeInClosedState: 5

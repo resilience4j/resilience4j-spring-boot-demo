@@ -41,8 +41,8 @@ public class Application {
 	}
 
 	@Bean
-	public CircularEventConsumer<CircuitBreakerEvent> circuitBreakerEventConsumer() {
-		return new CircularEventConsumer<>(100);
+	public CircularEventConsumer<CircuitBreakerEvent> circuitBreakerEventConsumer(CircuitBreakerProperties circuitBreakerProperties) {
+		return new CircularEventConsumer<>(circuitBreakerProperties.getEventBufferSize());
 	}
 
 	@Bean

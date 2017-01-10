@@ -13,6 +13,8 @@ import java.util.Map;
 @Component
 public class CircuitBreakerProperties {
 
+    private int eventBufferSize = 100;
+
     private Map<String, BackendProperties> backends = new HashMap<>();
 
     private BackendProperties getBackendProperties(String backend) {
@@ -53,5 +55,13 @@ public class CircuitBreakerProperties {
 
     public Map<String, BackendProperties> getBackends() {
         return backends;
+    }
+
+    public int getEventBufferSize() {
+        return eventBufferSize;
+    }
+
+    public void setEventBufferSize(int eventBufferSize) {
+        this.eventBufferSize = eventBufferSize;
     }
 }

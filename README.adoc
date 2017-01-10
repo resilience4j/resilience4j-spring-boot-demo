@@ -47,6 +47,7 @@ For example
 
 ----
 circuitbreaker:
+    eventBufferSize: 100
     backends:
         backendA:
             ringBufferSizeInClosedState: 5
@@ -60,6 +61,7 @@ circuitbreaker:
             failureRateThreshold: 50
 ----
 
+CircuitBreaker events are stored in a circular buffer which stores by default the latest 100 events. The size of the circular buffer is configurable.
 The demo adds a custom Spring Boot Actuator endpoint which can be used to monitor the emitted events of your CircuitBreakers.
 The endpoint `/management/circuitbreaker` lists the names of all CircuitBreaker instances.
 For example:
