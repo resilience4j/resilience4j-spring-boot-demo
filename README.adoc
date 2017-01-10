@@ -84,10 +84,16 @@ For example `/management/circuitbreaker/events/backendA`:
 ----
 
 You can even filter the list of  events.
-The endpoint `/management/circuitbreaker/events/{circuitBreakerName}/{eventType}` lists the filtered events if a CircuitBreaker.
+The endpoint `/management/circuitbreaker/events/{circuitBreakerName}/{eventType}` lists the filtered events.
+Event types can be:
 
+* ERROR: A CircuitBreakerEvent which informs that an error has been ignored.
+* IGNORED_ERROR: A CircuitBreakerEvent which informs that an error has been ignored.
+* SUCCESS: A CircuitBreakerEvent which informs that a success has been recorded.
+* NOT_PERMITTED: A CircuitBreakerEvent which informs that a call was not permitted because the CircuitBreaker state is OPEN.
+* STATE_TRANSITION: A CircuitBreakerEvent which informs the state of the CircuitBreaker has been changed.
 
-For example `/management/circuitbreaker/events/backendA/error`:
+For example `/management/circuitbreaker/events/backendA/ERROR`:
 ----
 [
   "2017-01-10T13:00:06.007+01:00[Europe/Berlin]: CircuitBreaker 'backendA' recorded an error: 'org.springframework.web.client.HttpServerErrorException: 500 This is a remote exception'. Elapsed time: 0 ms",
