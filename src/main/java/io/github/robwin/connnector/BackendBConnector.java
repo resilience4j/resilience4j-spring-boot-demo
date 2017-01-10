@@ -2,7 +2,7 @@ package io.github.robwin.connnector;
 
 
 import io.github.robwin.exception.BusinessException;
-import io.reactivex.Flowable;
+import io.reactivex.Observable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpServerErrorException;
@@ -26,7 +26,7 @@ public class BackendBConnector implements Connector {
     }
 
     @Override
-    public Flowable<String> eventStream() {
-        return Flowable.never();
+    public Observable<String> methodWhichReturnsAStream() {
+        return Observable.never();
     }
 }

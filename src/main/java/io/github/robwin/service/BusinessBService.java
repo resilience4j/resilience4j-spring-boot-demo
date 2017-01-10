@@ -2,11 +2,15 @@ package io.github.robwin.service;
 
 import io.github.robwin.circuitbreaker.CircuitBreaker;
 import io.github.robwin.circuitbreaker.CircuitBreakerRegistry;
+import io.github.robwin.circuitbreaker.operator.CircuitBreakerOperator;
 import io.github.robwin.config.CircuitBreakerProperties;
 import io.github.robwin.connnector.Connector;
+import io.reactivex.Observable;
 import javaslang.control.Try;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.TimeUnit;
 
 @Service(value = "businessBService")
 public class BusinessBService implements BusinessService  {
@@ -38,6 +42,12 @@ public class BusinessBService implements BusinessService  {
         Try.CheckedSupplier<String> backendFunction = CircuitBreaker.decorateCheckedSupplier(circuitBreaker, () -> backendBConnector.failure());
         return Try.of(backendFunction)
                 .recover((throwable) -> recovery(throwable));
+    }
+
+    public Observable<String> methodWhichReturnsAStream() {
+        return backendBConnector.methodWhichReturnsAStream()
+                .timeout(1, TimeUnit.SECONDS)
+                .lift(CircuitBreakerOperator.of(circuitBreaker));
     }
 
     private String recovery(Throwable throwable) {

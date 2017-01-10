@@ -35,6 +35,17 @@ public class BusinessBService implements BusinessService  {
 }
 ----
 
+You can even apply a CircuitBreaker to any RxJava `Flowable` or `Observable`.
+
+[source,java]
+----
+public Observable<String> methodWhichReturnsAStream() {
+    return backendBConnector.methodWhichReturnsAnObservable)
+            .timeout(1, TimeUnit.SECONDS)
+            .lift(CircuitBreakerOperator.of(circuitBreaker));
+}
+----
+
 == Monitoring
 
 Spring Boot Actuator health information can be used to check the status of your running application. It is often used by monitoring software to alert someone if a production system has serious issues. This demo publishes the status and metrics of all CircuitBreakers via a custom `CircuitBreakerHealthIndicator`. A closed CircuitBreaker state is mapped to UP, an open state to DOWN and a half-open state to UNKNOWN.

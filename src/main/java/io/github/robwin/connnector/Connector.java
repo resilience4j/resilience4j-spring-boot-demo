@@ -1,6 +1,6 @@
 package io.github.robwin.connnector;
 
-import io.reactivex.Flowable;
+import io.reactivex.Observable;
 
 public interface Connector {
     String failure();
@@ -9,5 +9,5 @@ public interface Connector {
 
     String ignoreException();
 
-    Flowable<String> eventStream();
+    Observable<String> methodWhichReturnsAStream();
 }
