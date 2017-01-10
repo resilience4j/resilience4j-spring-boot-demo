@@ -2,6 +2,8 @@
 
 This demo shows how to use the fault tolerance library https://github.com/RobWin/javaslang-circuitbreaker[javaslang-circuitbreaker] in a Spring Boot application.
 
+== Spring AOP
+
 The demo shows how to use a custom Spring AOP Aspect `CircuitBreakerAspect` and a custom `CircuitBreaker` annotation to make your Spring Boot application more fault tolerant. You can either annotate a class in order to protect all public methods or just some specific methods.
 For example:
 
@@ -13,6 +15,8 @@ public class BackendAConnector implements Connector {
     ...
 }
 ----
+
+== Functional style
 
 But you can still use a functional programming style. For example:
 
@@ -34,6 +38,8 @@ public class BusinessBService implements BusinessService  {
 
 }
 ----
+
+== RxJava
 
 You can even apply a CircuitBreaker to any RxJava `Flowable` or `Observable`.
 
