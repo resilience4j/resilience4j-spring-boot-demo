@@ -34,7 +34,7 @@ public class CircuitBreakerEventsEndpoint extends EndpointMvcAdapter {
 
     @RequestMapping(value = "events/{circuitBreakerName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<String> getCircuitBreakerEvents(@PathVariable("circuitBreakerName") String circuitBreakerName) {
+    public List<String> getEventsFilteredByCircuitBreakerName(@PathVariable("circuitBreakerName") String circuitBreakerName) {
         return circuitBreakerEventConsumer.getBufferedEvents()
                 .filter(event -> event.getCircuitBreakerName().equals(circuitBreakerName))
                 .map(Object::toString);
@@ -42,7 +42,7 @@ public class CircuitBreakerEventsEndpoint extends EndpointMvcAdapter {
 
     @RequestMapping(value = "events/{circuitBreakerName}/{eventType}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<String> getCircuitBreakerEvents(@PathVariable("circuitBreakerName") String circuitBreakerName,
+    public List<String> getEventsFilteredByCircuitBreakerNameAndEventType(@PathVariable("circuitBreakerName") String circuitBreakerName,
                                                 @PathVariable("eventType") String eventType) {
         return circuitBreakerEventConsumer.getBufferedEvents()
                 .filter(event -> event.getCircuitBreakerName().equals(circuitBreakerName))
