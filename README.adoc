@@ -87,7 +87,7 @@ You can even filter the list of  events.
 The endpoint `/management/circuitbreaker/events/{circuitBreakerName}/{eventType}` lists the filtered events.
 Event types can be:
 
-* ERROR: A CircuitBreakerEvent which informs that an error has been ignored.
+* ERROR: A CircuitBreakerEvent which informs that an error has been recorded.
 * IGNORED_ERROR: A CircuitBreakerEvent which informs that an error has been ignored.
 * SUCCESS: A CircuitBreakerEvent which informs that a success has been recorded.
 * NOT_PERMITTED: A CircuitBreakerEvent which informs that a call was not permitted because the CircuitBreaker state is OPEN.
