@@ -6,6 +6,7 @@ import io.github.robwin.circuitbreaker.CircuitBreakerConfig;
 import io.github.robwin.circuitbreaker.CircuitBreakerRegistry;
 import io.github.robwin.circuitbreaker.event.CircuitBreakerEvent;
 import io.github.robwin.circuitbreaker.event.CircuitBreakerOnErrorEvent;
+import io.github.robwin.config.CircuitBreakerProperties;
 import io.github.robwin.consumer.CircularEventConsumer;
 import javaslang.collection.List;
 import org.springframework.boot.actuate.health.Health;
@@ -24,9 +25,9 @@ public class CustomHealthIndicator implements HealthIndicator {
     private CircularEventConsumer<CircuitBreakerOnErrorEvent> circularEventConsumer;
     private CircuitBreaker circuitBreaker;
 
-    public CustomHealthIndicator(CircuitBreakerRegistry circuitBreakerRegistry, String backendName) {
+    public CustomHealthIndicator(CircuitBreakerRegistry circuitBreakerRegistry, CircuitBreakerProperties circuitBreakerProperties, String backendName) {
         this.circularEventConsumer = new CircularEventConsumer<>(5);
-        this.circuitBreaker = circuitBreakerRegistry.circuitBreaker(backendName);
+        this.circuitBreaker = circuitBreakerRegistry.circuitBreaker(backendName, () -> circuitBreakerProperties.circuitBreakerConfig(backendName));
         circuitBreaker.getEventStream()
                 .filter(event -> event.getEventType() == CircuitBreakerEvent.Type.ERROR)
                 .cast(CircuitBreakerOnErrorEvent.class)

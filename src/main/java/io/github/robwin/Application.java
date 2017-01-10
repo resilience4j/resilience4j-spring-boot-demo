@@ -2,6 +2,7 @@ package io.github.robwin;
 
 import io.github.robwin.circuitbreaker.CircuitBreakerRegistry;
 import io.github.robwin.circuitbreaker.annotation.EnableCircuitBreaker;
+import io.github.robwin.config.CircuitBreakerProperties;
 import io.github.robwin.health.CustomHealthIndicator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.health.HealthIndicator;
@@ -17,7 +18,14 @@ public class Application {
 	}
 
 	@Bean
-	public HealthIndicator testBackendCircuitBreaker(CircuitBreakerRegistry circuitBreakerRegistry){
-		return new CustomHealthIndicator(circuitBreakerRegistry, "testBackend");
+	public HealthIndicator backendA(CircuitBreakerRegistry circuitBreakerRegistry,
+													 CircuitBreakerProperties circuitBreakerProperties){
+		return new CustomHealthIndicator(circuitBreakerRegistry, circuitBreakerProperties, "backendA");
+	}
+
+	@Bean
+	public HealthIndicator backendB(CircuitBreakerRegistry circuitBreakerRegistry,
+													 CircuitBreakerProperties circuitBreakerProperties){
+		return new CustomHealthIndicator(circuitBreakerRegistry, circuitBreakerProperties, "backendB");
 	}
 }

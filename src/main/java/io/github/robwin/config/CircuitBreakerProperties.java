@@ -1,89 +1,55 @@
 package io.github.robwin.config;
 
-/**
- * Class storing property values for configuring {@link io.github.robwin.circuitbreaker.CircuitBreaker}s
- * used as backend monitors.
- */
+import io.github.robwin.circuitbreaker.CircuitBreakerConfig;
+import io.github.robwin.exception.BusinessException;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
+
+@ConfigurationProperties(prefix = "circuitbreaker")
 public class CircuitBreakerProperties {
 
-    private Integer waitInterval;
+    private Map<String, BackendProperties> backends = new HashMap<>();
 
-    private Integer failureRateThreshold;
-
-    private Integer ringBufferSizeInClosedState;
-
-    private Integer ringBufferSizeInHalfOpenState;
-
-
-    /**
-     * Returns the wait duration in seconds the CircuitBreaker will stay open, before it switches to half closed.
-     *
-     * @return the wait duration
-     */
-    public Integer getWaitInterval() {
-        return waitInterval;
+    private BackendProperties getBackendProperties(String backend) {
+        return backends.get(backend);
     }
 
-    /**
-     * Sets the wait duration in seconds the CircuitBreaker should stay open, before it switches to half closed.
-     *
-     * @param waitInterval the wait duration
-     */
-    public void setWaitInterval(Integer waitInterval) {
-        this.waitInterval = waitInterval;
+    public CircuitBreakerConfig circuitBreakerConfig(String backend) {
+        return circuitBreakerConfig(getBackendProperties(backend));
     }
 
-    /**
-     * Returns the failure rate threshold for the circuit breaker as percentage.
-     *
-     * @return the failure rate threshold
-     */
-    public Integer getFailureRateThreshold() {
-        return failureRateThreshold;
+    private CircuitBreakerConfig circuitBreakerConfig(BackendProperties backendProperties) {
+        if (backendProperties == null) {
+            return CircuitBreakerConfig.ofDefaults();
+        }
+
+        CircuitBreakerConfig.Builder circuitBreakerConfigBuilder = CircuitBreakerConfig.custom();
+
+        if (backendProperties.getWaitInterval() != null) {
+            circuitBreakerConfigBuilder.waitDurationInOpenState(Duration.ofMillis(backendProperties.getWaitInterval()));
+        }
+
+        if (backendProperties.getFailureRateThreshold() != null) {
+            circuitBreakerConfigBuilder.failureRateThreshold(backendProperties.getFailureRateThreshold());
+        }
+
+        if (backendProperties.getRingBufferSizeInClosedState() != null) {
+            circuitBreakerConfigBuilder.ringBufferSizeInClosedState(backendProperties.getRingBufferSizeInClosedState());
+        }
+
+        if (backendProperties.getRingBufferSizeInHalfOpenState() != null) {
+            circuitBreakerConfigBuilder.ringBufferSizeInHalfOpenState(backendProperties.getRingBufferSizeInHalfOpenState());
+        }
+
+        circuitBreakerConfigBuilder.recordFailure(e -> (!(e instanceof BusinessException)));
+
+        return circuitBreakerConfigBuilder.build();
     }
 
-    /**
-     * Sets the failure rate threshold for the circuit breaker as percentage.
-     *
-     * @param failureRateThreshold the failure rate threshold
-     */
-    public void setFailureRateThreshold(Integer failureRateThreshold) {
-        this.failureRateThreshold = failureRateThreshold;
-    }
-
-    /**
-     * Returns the ring buffer size for the circuit breaker while in closed state.
-     *
-     * @return the ring buffer size
-     */
-    public Integer getRingBufferSizeInClosedState() {
-        return ringBufferSizeInClosedState;
-    }
-
-    /**
-     * Sets the ring buffer size for the circuit breaker while in closed state.
-     *
-     * @param ringBufferSizeInClosedState the ring buffer size
-     */
-    public void setRingBufferSizeInClosedState(Integer ringBufferSizeInClosedState) {
-        this.ringBufferSizeInClosedState = ringBufferSizeInClosedState;
-    }
-
-    /**
-     * Returns the ring buffer size for the circuit breaker while in half open state.
-     *
-     * @return the ring buffer size
-     */
-    public Integer getRingBufferSizeInHalfOpenState() {
-        return ringBufferSizeInHalfOpenState;
-    }
-
-    /**
-     * Sets the ring buffer size for the circuit breaker while in half open state.
-     *
-     * @param ringBufferSizeInHalfOpenState the ring buffer size
-     */
-    public void setRingBufferSizeInHalfOpenState(Integer ringBufferSizeInHalfOpenState) {
-        this.ringBufferSizeInHalfOpenState = ringBufferSizeInHalfOpenState;
+    public Map<String, BackendProperties> getBackends() {
+        return backends;
     }
 }

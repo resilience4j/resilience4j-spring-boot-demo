@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Configuration;
 public class CircuitBreakerConfig {
 
     @Bean
-    public CircuitBreakerPropertiesRegistry backendMonitorPropertiesRegistry() {
-        return new CircuitBreakerPropertiesRegistry();
+    public CircuitBreakerProperties backendMonitorPropertiesRegistry() {
+        return new CircuitBreakerProperties();
     }
 
     @Bean

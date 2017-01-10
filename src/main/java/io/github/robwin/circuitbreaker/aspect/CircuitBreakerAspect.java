@@ -2,7 +2,7 @@ package io.github.robwin.circuitbreaker.aspect;
 
 import io.github.robwin.circuitbreaker.CircuitBreakerRegistry;
 import io.github.robwin.circuitbreaker.annotation.CircuitBreaker;
-import io.github.robwin.config.CircuitBreakerPropertiesRegistry;
+import io.github.robwin.config.CircuitBreakerProperties;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -18,11 +18,11 @@ public class CircuitBreakerAspect {
 
     private static Logger logger = LoggerFactory.getLogger(CircuitBreakerAspect.class);
 
-    private final CircuitBreakerPropertiesRegistry circuitBreakerPropertiesRegistry;
+    private final CircuitBreakerProperties circuitBreakerProperties;
     private final CircuitBreakerRegistry circuitBreakerRegistry;
 
-    public CircuitBreakerAspect(CircuitBreakerPropertiesRegistry backendMonitorPropertiesRegistry, CircuitBreakerRegistry circuitBreakerRegistry) {
-        this.circuitBreakerPropertiesRegistry = backendMonitorPropertiesRegistry;
+    public CircuitBreakerAspect(CircuitBreakerProperties backendMonitorPropertiesRegistry, CircuitBreakerRegistry circuitBreakerRegistry) {
+        this.circuitBreakerProperties = backendMonitorPropertiesRegistry;
         this.circuitBreakerRegistry = circuitBreakerRegistry;
     }
 
@@ -48,7 +48,7 @@ public class CircuitBreakerAspect {
 
     private io.github.robwin.circuitbreaker.CircuitBreaker getOrCreateCircuitBreaker(String methodName, String backend) {
         io.github.robwin.circuitbreaker.CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker(backend,
-                () -> circuitBreakerPropertiesRegistry.circuitBreakerConfig(backend));
+                () -> circuitBreakerProperties.circuitBreakerConfig(backend));
 
         if (logger.isDebugEnabled()) {
             logger.debug("Created or retrieved circuit breaker '{}' with failure rate '{}' and wait interval'{}' for method: '{}'",
