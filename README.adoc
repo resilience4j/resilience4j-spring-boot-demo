@@ -14,7 +14,7 @@ public class BackendAConnector implements Connector {
 }
 ----
 
-Spring Boot Actuator health information can be used to check the status of your running application. It is often used by monitoring software to alert someone if a production system has serious issued. This demo publishes the status and metrics of all CircuitBreakers via a custom `CircuitBreakerHealthIndicator`. A closed CircuitBreaker state is mapped to UP, an open state to DOWN and a half-open state to UNKNOWN.
+Spring Boot Actuator health information can be used to check the status of your running application. It is often used by monitoring software to alert someone if a production system has serious issues. This demo publishes the status and metrics of all CircuitBreakers via a custom `CircuitBreakerHealthIndicator`. A closed CircuitBreaker state is mapped to UP, an open state to DOWN and a half-open state to UNKNOWN.
 For example:
 
 [source,json]
@@ -71,7 +71,18 @@ For example:
 ]
 ----
 
-The endpoint `/management/circuitbreaker/events/{circuitBreakerName}` lists the emitted events of a CircuitBreaker.
+The endpoint `/management/circuitbreaker/events` list the latest 100 emitted events of a all CircuitBreaker instances.
+
+----
+[
+  "2017-01-10T14:24:59.160+01:00[Europe/Berlin]: CircuitBreaker 'backendA' recorded a successful call. Elapsed time: 0 ms",
+  "2017-01-10T14:25:00.237+01:00[Europe/Berlin]: CircuitBreaker 'backendA' recorded an error: 'org.springframework.web.client.HttpServerErrorException: 500 This is a remote exception'. Elapsed time: 0 ms",
+  "2017-01-10T14:25:07.220+01:00[Europe/Berlin]: CircuitBreaker 'backendB' recorded an error: 'org.springframework.web.client.HttpServerErrorException: 500 This is a remote exception'. Elapsed time: 0 ms",
+  "2017-01-10T14:25:08.385+01:00[Europe/Berlin]: CircuitBreaker 'backendB' recorded a successful call. Elapsed time: 0 ms"
+]
+----
+
+The endpoint `/management/circuitbreaker/events/{circuitBreakerName}` lists the latest emitted events of a specific CircuitBreaker.
 For example `/management/circuitbreaker/events/backendA`:
 
 ----

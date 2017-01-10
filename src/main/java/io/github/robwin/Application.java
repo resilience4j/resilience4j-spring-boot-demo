@@ -1,10 +1,12 @@
 package io.github.robwin;
 
+import com.fasterxml.jackson.databind.Module;
 import io.github.robwin.circuitbreaker.CircuitBreakerRegistry;
 import io.github.robwin.circuitbreaker.event.CircuitBreakerEvent;
 import io.github.robwin.config.CircuitBreakerProperties;
 import io.github.robwin.consumer.CircularEventConsumer;
 import io.github.robwin.monitoring.health.CircuitBreakerHealthIndicator;
+import javaslang.jackson.datatype.JavaslangModule;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -41,5 +43,10 @@ public class Application {
 	@Bean
 	public CircularEventConsumer<CircuitBreakerEvent> circuitBreakerEventConsumer() {
 		return new CircularEventConsumer<>(100);
+	}
+
+	@Bean
+	public Module javaslangModule() {
+		return new JavaslangModule();
 	}
 }

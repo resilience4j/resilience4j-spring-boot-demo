@@ -2,11 +2,11 @@ package io.github.robwin.monitoring.endpoint;
 
 import io.github.robwin.circuitbreaker.CircuitBreaker;
 import io.github.robwin.circuitbreaker.CircuitBreakerRegistry;
+import javaslang.collection.Seq;
 import org.springframework.boot.actuate.endpoint.AbstractEndpoint;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 
 /**
  * Endpoint which lists all CircuitBreaker events.
@@ -23,9 +23,9 @@ public class CircuitBreakerEndpoint extends AbstractEndpoint {
     }
 
     @Override
-    public ResponseEntity<List<String>> invoke() {
-        List<String> circuitBreakers = circuitBreakerRegistry.getAllCircuitBreakers()
-                .map(CircuitBreaker::getName).sorted().toJavaList();
+    public ResponseEntity<Seq<String>> invoke() {
+        Seq<String> circuitBreakers = circuitBreakerRegistry.getAllCircuitBreakers()
+                .map(CircuitBreaker::getName).sorted();
         return ResponseEntity.ok(circuitBreakers);
     }
 }
