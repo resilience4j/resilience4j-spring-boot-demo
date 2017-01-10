@@ -79,7 +79,7 @@ For example:
 ]
 ----
 
-The endpoint `/management/circuitbreaker/events` list the latest 100 emitted events of all CircuitBreaker instances.
+The endpoint `/management/circuitbreaker/events` lists the latest 100 emitted events of all CircuitBreaker instances.
 
 ----
 [
