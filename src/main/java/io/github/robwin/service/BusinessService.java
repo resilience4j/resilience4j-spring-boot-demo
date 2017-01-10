@@ -1,5 +1,7 @@
 package io.github.robwin.service;
 
+import javaslang.control.Try;
+
 public interface BusinessService {
     String failure();
 
@@ -7,5 +9,5 @@ public interface BusinessService {
 
     String ignore();
 
-    String recover();
+    Try<String> methodWithRecovery();
 }

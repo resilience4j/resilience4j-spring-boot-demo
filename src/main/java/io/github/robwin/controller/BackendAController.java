@@ -32,7 +32,7 @@ public class BackendAController {
     }
 
     @GetMapping("recover")
-    public String recover(){
-        return businessAService.recover();
+    public String methodWithRecovery(){
+        return businessAService.methodWithRecovery().get();
     }
 }

@@ -34,13 +34,14 @@ public class BusinessBService implements BusinessService  {
     }
 
     @Override
-    public String recover() {
-        return Try.of(this::failure)
-                .recover((throwable) -> recovery())
-                .get();
+    public Try<String> methodWithRecovery() {
+        Try.CheckedSupplier<String> backendFunction = CircuitBreaker.decorateCheckedSupplier(circuitBreaker, () -> backendBConnector.failure());
+        return Try.of(backendFunction)
+                .recover((throwable) -> recovery(throwable));
     }
 
-    private String recovery() {
+    private String recovery(Throwable throwable) {
+        // Handle exception and invoke fallback
         return "Hello world from recovery";
     }
 }

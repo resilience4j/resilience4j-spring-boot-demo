@@ -30,10 +30,9 @@ public class BusinessAService implements BusinessService {
     }
 
     @Override
-    public String recover() {
+    public Try<String> methodWithRecovery() {
         return Try.of(backendAConnector::failure)
-                .recover((throwable) -> recovery())
-                .get();
+                .recover((throwable) -> recovery());
     }
 
     private String recovery() {
