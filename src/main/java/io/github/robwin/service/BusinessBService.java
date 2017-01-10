@@ -2,6 +2,7 @@ package io.github.robwin.service;
 
 import io.github.robwin.circuitbreaker.CircuitBreaker;
 import io.github.robwin.circuitbreaker.CircuitBreakerRegistry;
+import io.github.robwin.config.CircuitBreakerProperties;
 import io.github.robwin.connnector.Connector;
 import javaslang.control.Try;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,9 +15,9 @@ public class BusinessBService implements BusinessService  {
     private final CircuitBreaker circuitBreaker;
 
     public BusinessBService(@Qualifier("backendBConnector") Connector backendBConnector,
-                            CircuitBreakerRegistry circuitBreakerRegistry){
+                            CircuitBreakerRegistry circuitBreakerRegistry, CircuitBreakerProperties circuitBreakerProperties){
         this.backendBConnector = backendBConnector;
-        circuitBreaker = circuitBreakerRegistry.circuitBreaker("backendB");
+        circuitBreaker = circuitBreakerRegistry.circuitBreaker("backendB", circuitBreakerProperties.circuitBreakerConfig("backendB"));
     }
 
     public String failure() {

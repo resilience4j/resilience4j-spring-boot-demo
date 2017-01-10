@@ -83,10 +83,32 @@ The endpoint `/management/circuitbreaker/events` list the latest 100 emitted eve
 
 ----
 [
-  "2017-01-10T14:24:59.160+01:00[Europe/Berlin]: CircuitBreaker 'backendA' recorded a successful call. Elapsed time: 0 ms",
-  "2017-01-10T14:25:00.237+01:00[Europe/Berlin]: CircuitBreaker 'backendA' recorded an error: 'org.springframework.web.client.HttpServerErrorException: 500 This is a remote exception'. Elapsed time: 0 ms",
-  "2017-01-10T14:25:07.220+01:00[Europe/Berlin]: CircuitBreaker 'backendB' recorded an error: 'org.springframework.web.client.HttpServerErrorException: 500 This is a remote exception'. Elapsed time: 0 ms",
-  "2017-01-10T14:25:08.385+01:00[Europe/Berlin]: CircuitBreaker 'backendB' recorded a successful call. Elapsed time: 0 ms"
+  {
+    "circuitBreakerName": "backendA",
+    "type": "ERROR",
+    "creationTime": "2017-01-10T15:39:17.117+01:00[Europe/Berlin]",
+    "errorMessage": "org.springframework.web.client.HttpServerErrorException: 500 This is a remote exception",
+    "durationInMs": 0
+  },
+  {
+    "circuitBreakerName": "backendA",
+    "type": "SUCCESS",
+    "creationTime": "2017-01-10T15:39:20.518+01:00[Europe/Berlin]",
+    "durationInMs": 0
+  },
+  {
+    "circuitBreakerName": "backendB",
+    "type": "ERROR",
+    "creationTime": "2017-01-10T15:41:31.159+01:00[Europe/Berlin]",
+    "errorMessage": "org.springframework.web.client.HttpServerErrorException: 500 This is a remote exception",
+    "durationInMs": 0
+  },
+  {
+    "circuitBreakerName": "backendB",
+    "type": "SUCCESS",
+    "creationTime": "2017-01-10T15:41:33.526+01:00[Europe/Berlin]",
+    "durationInMs": 0
+  }
 ]
 ----
 
@@ -95,10 +117,30 @@ For example `/management/circuitbreaker/events/backendA`:
 
 ----
 [
-  "2017-01-10T13:00:06.007+01:00[Europe/Berlin]: CircuitBreaker 'backendA' recorded an error: 'org.springframework.web.client.HttpServerErrorException: 500 This is a remote exception'. Elapsed time: 0 ms",
-  "2017-01-10T13:00:07.314+01:00[Europe/Berlin]: CircuitBreaker 'backendA' recorded a successful call. Elapsed time: 0 ms",
-  "2017-01-10T13:00:13.909+01:00[Europe/Berlin]: CircuitBreaker 'backendA' recorded an error: 'org.springframework.web.client.HttpServerErrorException: 500 This is a remote exception'. Elapsed time: 0 ms",
-  "2017-01-10T13:00:14.932+01:00[Europe/Berlin]: CircuitBreaker 'backendA' recorded a successful call. Elapsed time: 0 ms"
+  {
+    "circuitBreakerName": "backendA",
+    "type": "ERROR",
+    "creationTime": "2017-01-10T15:39:17.117+01:00[Europe/Berlin]",
+    "errorMessage": "org.springframework.web.client.HttpServerErrorException: 500 This is a remote exception",
+    "durationInMs": 0
+  },
+  {
+    "circuitBreakerName": "backendA",
+    "type": "SUCCESS",
+    "creationTime": "2017-01-10T15:39:20.518+01:00[Europe/Berlin]",
+    "durationInMs": 0
+  },
+  {
+    "circuitBreakerName": "backendA",
+    "type": "STATE_TRANSITION",
+    "creationTime": "2017-01-10T15:39:22.341+01:00[Europe/Berlin]",
+    "stateTransition": "CLOSED_TO_OPEN"
+  },
+  {
+    "circuitBreakerName": "backendA",
+    "type": "NOT_PERMITTED",
+    "creationTime": "2017-01-10T15:39:22.780+01:00[Europe/Berlin]"
+  }
 ]
 ----
 
@@ -115,7 +157,19 @@ Event types can be:
 For example `/management/circuitbreaker/events/backendA/ERROR`:
 ----
 [
-  "2017-01-10T13:00:06.007+01:00[Europe/Berlin]: CircuitBreaker 'backendA' recorded an error: 'org.springframework.web.client.HttpServerErrorException: 500 This is a remote exception'. Elapsed time: 0 ms",
-  "2017-01-10T13:00:13.909+01:00[Europe/Berlin]: CircuitBreaker 'backendA' recorded an error: 'org.springframework.web.client.HttpServerErrorException: 500 This is a remote exception'. Elapsed time: 0 ms",
+  {
+    "circuitBreakerName": "backendA",
+    "type": "ERROR",
+    "creationTime": "2017-01-10T15:42:59.324+01:00[Europe/Berlin]",
+    "errorMessage": "org.springframework.web.client.HttpServerErrorException: 500 This is a remote exception",
+    "durationInMs": 0
+  },
+  {
+    "circuitBreakerName": "backendA",
+    "type": "ERROR",
+    "creationTime": "2017-01-10T15:43:22.802+01:00[Europe/Berlin]",
+    "errorMessage": "org.springframework.web.client.HttpServerErrorException: 500 This is a remote exception",
+    "durationInMs": 0
+  }
 ]
 ----

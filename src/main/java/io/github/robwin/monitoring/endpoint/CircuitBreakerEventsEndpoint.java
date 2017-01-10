@@ -27,26 +27,26 @@ public class CircuitBreakerEventsEndpoint extends EndpointMvcAdapter {
 
     @RequestMapping(value = "events", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<String> getAllCircuitBreakerEvents() {
+    public List<CircuitBreakerEventDTO> getAllCircuitBreakerEvents() {
         return circuitBreakerEventConsumer.getBufferedEvents()
-                .map(Object::toString);
+                .map(CircuitBreakerEventDTOFactory::createCircuitBreakerEventDTO);
     }
 
     @RequestMapping(value = "events/{circuitBreakerName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<String> getEventsFilteredByCircuitBreakerName(@PathVariable("circuitBreakerName") String circuitBreakerName) {
+    public List<CircuitBreakerEventDTO> getEventsFilteredByCircuitBreakerName(@PathVariable("circuitBreakerName") String circuitBreakerName) {
         return circuitBreakerEventConsumer.getBufferedEvents()
                 .filter(event -> event.getCircuitBreakerName().equals(circuitBreakerName))
-                .map(Object::toString);
+                .map(CircuitBreakerEventDTOFactory::createCircuitBreakerEventDTO);
     }
 
     @RequestMapping(value = "events/{circuitBreakerName}/{eventType}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<String> getEventsFilteredByCircuitBreakerNameAndEventType(@PathVariable("circuitBreakerName") String circuitBreakerName,
+    public List<CircuitBreakerEventDTO> getEventsFilteredByCircuitBreakerNameAndEventType(@PathVariable("circuitBreakerName") String circuitBreakerName,
                                                 @PathVariable("eventType") String eventType) {
         return circuitBreakerEventConsumer.getBufferedEvents()
                 .filter(event -> event.getCircuitBreakerName().equals(circuitBreakerName))
                 .filter(event -> event.getEventType() == CircuitBreakerEvent.Type.valueOf(eventType.toUpperCase()))
-                .map(Object::toString);
+                .map(CircuitBreakerEventDTOFactory::createCircuitBreakerEventDTO);
     }
 }
