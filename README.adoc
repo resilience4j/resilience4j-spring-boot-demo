@@ -46,7 +46,7 @@ You can even apply a CircuitBreaker to any RxJava `Flowable` or `Observable`.
 [source,java]
 ----
 public Observable<String> methodWhichReturnsAStream() {
-    return backendBConnector.methodWhichReturnsAnObservable)
+    return backendBConnector.methodWhichReturnsAnObservable()
             .timeout(1, TimeUnit.SECONDS)
             .lift(CircuitBreakerOperator.of(circuitBreaker));
 }
