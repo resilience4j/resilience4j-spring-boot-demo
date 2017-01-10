@@ -21,7 +21,7 @@ public class BusinessBService implements BusinessService  {
     public BusinessBService(@Qualifier("backendBConnector") Connector backendBConnector,
                             CircuitBreakerRegistry circuitBreakerRegistry, CircuitBreakerProperties circuitBreakerProperties){
         this.backendBConnector = backendBConnector;
-        circuitBreaker = circuitBreakerRegistry.circuitBreaker("backendB", circuitBreakerProperties.circuitBreakerConfig("backendB"));
+        circuitBreaker = circuitBreakerRegistry.circuitBreaker("backendB", () -> circuitBreakerProperties.circuitBreakerConfig("backendB"));
     }
 
     public String failure() {
