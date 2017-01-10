@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 @Component
+@RequestMapping(value = "events", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 public class CircuitBreakerEventsEndpoint extends EndpointMvcAdapter {
 
     private final CircularEventConsumer<CircuitBreakerEvent> circuitBreakerEventConsumer;
@@ -29,6 +30,17 @@ public class CircuitBreakerEventsEndpoint extends EndpointMvcAdapter {
     public List<String> getCircuitBreakerEvents(@PathVariable("circuitBreakerName") String circuitBreakerName) {
         return circuitBreakerEventConsumer.getBufferedEvents()
                 .filter(event -> event.getCircuitBreakerName().equals(circuitBreakerName))
+                .map(Object::toString)
+                .toJavaList();
+    }
+
+    @RequestMapping(value = "{circuitBreakerName}/{eventType}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<String> getCircuitBreakerEvents(@PathVariable("circuitBreakerName") String circuitBreakerName,
+                                                @PathVariable("eventType") String eventType) {
+        return circuitBreakerEventConsumer.getBufferedEvents()
+                .filter(event -> event.getCircuitBreakerName().equals(circuitBreakerName))
+                .filter(event -> event.getEventType() == CircuitBreakerEvent.Type.valueOf(eventType.toUpperCase()))
                 .map(Object::toString)
                 .toJavaList();
     }

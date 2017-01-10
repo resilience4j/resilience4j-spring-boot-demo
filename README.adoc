@@ -71,8 +71,8 @@ For example:
 ]
 ----
 
-The endpoint `/management/circuitbreaker/{circuitBreakerName}` list the emitted events if a CircuitBreaker.
-For example:
+The endpoint `/management/circuitbreaker/events/{circuitBreakerName}` lists the emitted events of a CircuitBreaker.
+For example `/management/circuitbreaker/events/backendA`:
 
 ----
 [
@@ -80,5 +80,17 @@ For example:
   "2017-01-10T13:00:07.314+01:00[Europe/Berlin]: CircuitBreaker 'backendA' recorded a successful call. Elapsed time: 0 ms",
   "2017-01-10T13:00:13.909+01:00[Europe/Berlin]: CircuitBreaker 'backendA' recorded an error: 'org.springframework.web.client.HttpServerErrorException: 500 This is a remote exception'. Elapsed time: 0 ms",
   "2017-01-10T13:00:14.932+01:00[Europe/Berlin]: CircuitBreaker 'backendA' recorded a successful call. Elapsed time: 0 ms"
+]
+----
+
+You can even filter the list of  events.
+The endpoint `/management/circuitbreaker/events/{circuitBreakerName}/{eventType}` lists the filtered events if a CircuitBreaker.
+
+
+For example `/management/circuitbreaker/events/backendA/error`:
+----
+[
+  "2017-01-10T13:00:06.007+01:00[Europe/Berlin]: CircuitBreaker 'backendA' recorded an error: 'org.springframework.web.client.HttpServerErrorException: 500 This is a remote exception'. Elapsed time: 0 ms",
+  "2017-01-10T13:00:13.909+01:00[Europe/Berlin]: CircuitBreaker 'backendA' recorded an error: 'org.springframework.web.client.HttpServerErrorException: 500 This is a remote exception'. Elapsed time: 0 ms",
 ]
 ----
