@@ -1,8 +1,8 @@
 = Spring Boot Demo of javaslang-circuitbreaker
 
-This demo which shows how to use the fault tolerance library [javaslang-circuitbreaker](https://github.com/RobWin/javaslang-circuitbreaker) in a Spring Boot application.
+This demo which shows how to use the fault tolerance library https://github.com/RobWin/javaslang-circuitbreaker[javaslang-circuitbreaker] in a Spring Boot application.
 
-The demo shows how to use a Spring AOP Aspect and a custom `CircuitBreaker` annotation to make your Spring Boot application more fault tolerant. You can either annotate a class in order to protect all public methods or just some specific methods.
+The demo shows how to use a Spring AOP Aspect `CircuitBreakerAspect` and a custom `CircuitBreaker` annotation to make your Spring Boot application more fault tolerant. You can either annotate a class in order to protect all public methods or just some specific methods.
 For example:
 
 [source,java]

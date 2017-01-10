@@ -3,12 +3,14 @@ package io.github.robwin.config;
 import io.github.robwin.circuitbreaker.CircuitBreakerConfig;
 import io.github.robwin.exception.BusinessException;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
 @ConfigurationProperties(prefix = "circuitbreaker")
+@Component
 public class CircuitBreakerProperties {
 
     private Map<String, BackendProperties> backends = new HashMap<>();
