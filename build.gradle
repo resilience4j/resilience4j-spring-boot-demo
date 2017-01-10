@@ -23,6 +23,7 @@ sourceCompatibility = 1.8
 
 repositories {
 	mavenCentral()
+	maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 }
 
 
@@ -30,7 +31,8 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.boot:spring-boot-starter-aop')
 	compile("org.springframework.boot:spring-boot-starter-actuator")
-	compile('io.github.robwin:javaslang-circuitbreaker:0.8.0')
+	compile('io.github.robwin:javaslang-circuitbreaker:0.8.1-SNAPSHOT')
+	compile("io.javaslang:javaslang-jackson:2.0.5")
 	compile("net.logstash.logback:logstash-logback-encoder:4.7")
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }

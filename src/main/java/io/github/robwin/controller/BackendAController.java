@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/backendA")
 public class BackendAController {
 
-    private BusinessService businessAService;
+    private final BusinessService businessAService;
 
     public BackendAController(@Qualifier("businessAService") BusinessService businessAService){
         this.businessAService = businessAService;
@@ -29,5 +29,10 @@ public class BackendAController {
     @GetMapping("ignore")
     public String ignore(){
         return businessAService.ignore();
+    }
+
+    @GetMapping("recover")
+    public String recover(){
+        return businessAService.recover();
     }
 }

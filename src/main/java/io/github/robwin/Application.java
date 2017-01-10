@@ -1,8 +1,10 @@
 package io.github.robwin;
 
 import io.github.robwin.circuitbreaker.CircuitBreakerRegistry;
+import io.github.robwin.circuitbreaker.event.CircuitBreakerEvent;
 import io.github.robwin.config.CircuitBreakerProperties;
-import io.github.robwin.health.CircuitBreakerHealthIndicator;
+import io.github.robwin.consumer.CircularEventConsumer;
+import io.github.robwin.monitoring.health.CircuitBreakerHealthIndicator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,18 +21,25 @@ public class Application {
 
 	@Bean
 	public HealthIndicator backendA(CircuitBreakerRegistry circuitBreakerRegistry,
-													 CircuitBreakerProperties circuitBreakerProperties){
-		return new CircuitBreakerHealthIndicator(circuitBreakerRegistry, circuitBreakerProperties, "backendA");
+									CircuitBreakerProperties circuitBreakerProperties,
+									CircularEventConsumer<CircuitBreakerEvent> circuitBreakerEventConsumer){
+		return new CircuitBreakerHealthIndicator(circuitBreakerRegistry, circuitBreakerProperties, circuitBreakerEventConsumer, "backendA");
 	}
 
 	@Bean
 	public HealthIndicator backendB(CircuitBreakerRegistry circuitBreakerRegistry,
-													 CircuitBreakerProperties circuitBreakerProperties){
-		return new CircuitBreakerHealthIndicator(circuitBreakerRegistry, circuitBreakerProperties, "backendB");
+									CircuitBreakerProperties circuitBreakerProperties,
+									CircularEventConsumer<CircuitBreakerEvent> circuitBreakerEventConsumer){
+		return new CircuitBreakerHealthIndicator(circuitBreakerRegistry, circuitBreakerProperties, circuitBreakerEventConsumer, "backendB");
 	}
 
 	@Bean
-	public io.github.robwin.circuitbreaker.CircuitBreakerRegistry circuitBreakerRegistry() {
+	public CircuitBreakerRegistry circuitBreakerRegistry() {
 		return CircuitBreakerRegistry.ofDefaults();
+	}
+
+	@Bean
+	public CircularEventConsumer<CircuitBreakerEvent> circuitBreakerEventConsumer() {
+		return new CircularEventConsumer<>(100);
 	}
 }

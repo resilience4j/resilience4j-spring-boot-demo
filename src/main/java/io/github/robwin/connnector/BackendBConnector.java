@@ -1,13 +1,12 @@
 package io.github.robwin.connnector;
 
 
-import io.github.robwin.circuitbreaker.annotation.CircuitBreaker;
 import io.github.robwin.exception.BusinessException;
+import io.reactivex.Flowable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpServerErrorException;
 
-@CircuitBreaker(backend = "backendB")
 @Component(value = "backendBConnector")
 public class BackendBConnector implements Connector {
 
@@ -24,5 +23,10 @@ public class BackendBConnector implements Connector {
     @Override
     public String ignoreException() {
         throw new BusinessException("This exception is ignored by the CircuitBreaker of backend B");
+    }
+
+    @Override
+    public Flowable<String> eventStream() {
+        return Flowable.never();
     }
 }

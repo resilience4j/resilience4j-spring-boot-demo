@@ -1,14 +1,12 @@
-package io.github.robwin.health;
+package io.github.robwin.monitoring.health;
 
 
 import io.github.robwin.circuitbreaker.CircuitBreaker;
 import io.github.robwin.circuitbreaker.CircuitBreakerConfig;
 import io.github.robwin.circuitbreaker.CircuitBreakerRegistry;
 import io.github.robwin.circuitbreaker.event.CircuitBreakerEvent;
-import io.github.robwin.circuitbreaker.event.CircuitBreakerOnErrorEvent;
 import io.github.robwin.config.CircuitBreakerProperties;
 import io.github.robwin.consumer.CircularEventConsumer;
-import javaslang.collection.List;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 
@@ -22,16 +20,15 @@ public class CircuitBreakerHealthIndicator implements HealthIndicator {
     private static final String FAILED_CALLS = "failedCalls";
     private static final String NOT_PERMITTED = "notPermittedCalls";
     private static final String MAX_BUFFERED_CALLS = "maxBufferedCalls";
-    private CircularEventConsumer<CircuitBreakerOnErrorEvent> circularEventConsumer;
     private CircuitBreaker circuitBreaker;
 
-    public CircuitBreakerHealthIndicator(CircuitBreakerRegistry circuitBreakerRegistry, CircuitBreakerProperties circuitBreakerProperties, String backendName) {
-        this.circularEventConsumer = new CircularEventConsumer<>(5);
+    public CircuitBreakerHealthIndicator(CircuitBreakerRegistry circuitBreakerRegistry,
+                                         CircuitBreakerProperties circuitBreakerProperties,
+                                         CircularEventConsumer<CircuitBreakerEvent> circuitBreakerEventConsumer,
+                                         String backendName) {
         this.circuitBreaker = circuitBreakerRegistry.circuitBreaker(backendName, () -> circuitBreakerProperties.circuitBreakerConfig(backendName));
         circuitBreaker.getEventStream()
-                .filter(event -> event.getEventType() == CircuitBreakerEvent.Type.ERROR)
-                .cast(CircuitBreakerOnErrorEvent.class)
-                .subscribe(circularEventConsumer);
+                .subscribe(circuitBreakerEventConsumer);
     }
 
     @Override
@@ -42,31 +39,19 @@ public class CircuitBreakerHealthIndicator implements HealthIndicator {
     }
 
     private Health mapBackendMonitorState(CircuitBreaker circuitBreaker) {
-        Health.Builder builder;
         switch (circuitBreaker.getState()) {
             case CLOSED:
-                builder = Health.up();
-                addDetails(builder, circuitBreaker);
-                return builder.build();
+                return addDetails(Health.up(), circuitBreaker).build();
             case OPEN:
-                builder = Health.down();
-                addDetails(builder, circuitBreaker);
-                addBufferedExceptions(builder);
-                return builder.build();
+                return addDetails(Health.down(), circuitBreaker).build();
             case HALF_OPEN:
-                builder = Health.unknown();
-                addDetails(builder, circuitBreaker);
-                addBufferedExceptions(builder);
-                return builder.build();
+                return addDetails(Health.unknown(),circuitBreaker).build();
             default:
-                builder = Health.unknown();
-                addDetails(builder, circuitBreaker);
-                addBufferedExceptions(builder);
-                return builder.build();
+                return addDetails(Health.unknown(), circuitBreaker).build();
         }
     }
 
-    private void addDetails(Health.Builder builder, CircuitBreaker circuitBreaker) {
+    private Health.Builder addDetails(Health.Builder builder, CircuitBreaker circuitBreaker) {
         CircuitBreaker.Metrics metrics = circuitBreaker.getMetrics();
         CircuitBreakerConfig config = circuitBreaker.getCircuitBreakerConfig();
         builder.withDetail(FAILURE_RATE, metrics.getFailureRate() + "%")
@@ -75,15 +60,6 @@ public class CircuitBreakerHealthIndicator implements HealthIndicator {
             .withDetail(BUFFERED_CALLS, metrics.getNumberOfBufferedCalls())
             .withDetail(FAILED_CALLS, metrics.getNumberOfFailedCalls())
             .withDetail(NOT_PERMITTED, metrics.getNumberOfNotPermittedCalls());
-    }
-
-    private void addBufferedExceptions(Health.Builder builder) {
-        List<String> bufferedExceptions = circularEventConsumer.getBufferedEvents()
-                .map(CircuitBreakerOnErrorEvent::toString);
-        bufferedExceptions
-                .zipWithIndex()
-                .forEach(exceptionWithIndex ->
-                        builder.withDetail(String.format("Error %d", exceptionWithIndex._2+1), exceptionWithIndex._1));
-
+        return builder;
     }
 }

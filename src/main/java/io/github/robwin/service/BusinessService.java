@@ -6,4 +6,6 @@ public interface BusinessService {
     String success();
 
     String ignore();
+
+    String recover();
 }

@@ -1,8 +1,8 @@
 = Spring Boot Demo of javaslang-circuitbreaker
 
-This demo which shows how to use the fault tolerance library https://github.com/RobWin/javaslang-circuitbreaker[javaslang-circuitbreaker] in a Spring Boot application.
+This demo shows how to use the fault tolerance library https://github.com/RobWin/javaslang-circuitbreaker[javaslang-circuitbreaker] in a Spring Boot application.
 
-The demo shows how to use a Spring AOP Aspect `CircuitBreakerAspect` and a custom `CircuitBreaker` annotation to make your Spring Boot application more fault tolerant. You can either annotate a class in order to protect all public methods or just some specific methods.
+The demo shows how to use a custom Spring AOP Aspect `CircuitBreakerAspect` and a custom `CircuitBreaker` annotation to make your Spring Boot application more fault tolerant. You can either annotate a class in order to protect all public methods or just some specific methods.
 For example:
 
 [source,java]
@@ -58,4 +58,27 @@ circuitbreaker:
             ringBufferSizeInHalfOpenState: 5
             waitInterval: 5000
             failureRateThreshold: 50
+----
+
+The demo adds a custom Spring Boot Actuator endpoint which can be used to monitor the emitted events of your CircuitBreakers.
+The endpoint `/management/circuitbreaker` lists the names of all CircuitBreaker instances.
+For example:
+
+----
+[
+  "backendA",
+  "backendB"
+]
+----
+
+The endpoint `/management/circuitbreaker/{circuitBreakerName}` list the emitted events if a CircuitBreaker.
+For example:
+
+----
+[
+  "2017-01-10T13:00:06.007+01:00[Europe/Berlin]: CircuitBreaker 'backendA' recorded an error: 'org.springframework.web.client.HttpServerErrorException: 500 This is a remote exception'. Elapsed time: 0 ms",
+  "2017-01-10T13:00:07.314+01:00[Europe/Berlin]: CircuitBreaker 'backendA' recorded a successful call. Elapsed time: 0 ms",
+  "2017-01-10T13:00:13.909+01:00[Europe/Berlin]: CircuitBreaker 'backendA' recorded an error: 'org.springframework.web.client.HttpServerErrorException: 500 This is a remote exception'. Elapsed time: 0 ms",
+  "2017-01-10T13:00:14.932+01:00[Europe/Berlin]: CircuitBreaker 'backendA' recorded a successful call. Elapsed time: 0 ms"
+]
 ----

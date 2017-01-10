@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/backendB")
 public class BackendBController {
 
-    private BusinessService businessBService;
+    private final BusinessService businessBService;
 
     public BackendBController(@Qualifier("businessBService")BusinessService businessBService){
         this.businessBService = businessBService;
