@@ -1,0 +1,61 @@
+= Spring Boot Demo of javaslang-circuitbreaker
+
+This demo which shows how to use the fault tolerance library [javaslang-circuitbreaker](https://github.com/RobWin/javaslang-circuitbreaker) in a Spring Boot application.
+
+The demo shows how to use a Spring AOP Aspect and a custom `CircuitBreaker` annotation to make your Spring Boot application more fault tolerant. You can either annotate a class in order to protect all public methods or just some specific methods.
+For example:
+
+[source,java]
+----
+@CircuitBreaker(backend = "backendA")
+@Component(value = "backendAConnector")
+public class BackendAConnector implements Connector {
+    ...
+}
+----
+
+Spring Boot Actuator health information can be used to check the status of your running application. It is often used by monitoring software to alert someone if a production system has serious issued. This demo publishes the status and metrics of all CircuitBreakers via a custom HealthIndicator. A closed CircuitBreaker state is mapped to UP, an open state to DOWN and a half-open state to UNKNOWN.
+For example:
+
+[source,json]
+----
+{
+  "status": "UP",
+  "backendA": {
+    "status": "DOWN",
+    "failureRate": "60.0%",
+    "failureRateThreshold": "50.0%",
+    "maxBufferedCalls": 5,
+    "bufferedCalls": 5,
+    "failedCalls": 3,
+    "notPermittedCalls": 0
+  },
+  "backendB": {
+    "status": "UP",
+    "failureRate": "0.0%",
+    "failureRateThreshold": "50.0%",
+    "maxBufferedCalls": 10,
+    "bufferedCalls": 10,
+    "failedCalls": 0,
+    "notPermittedCalls": 0
+  }
+}
+----
+
+You can configure your CircuitBreakers in Spring Boot's `application.yml` config file.
+For example
+
+----
+circuitbreaker:
+    backends:
+        backendA:
+            ringBufferSizeInClosedState: 5
+            ringBufferSizeInHalfOpenState: 3
+            waitInterval: 5000
+            failureRateThreshold: 50
+        backendB:
+            ringBufferSizeInClosedState: 10
+            ringBufferSizeInHalfOpenState: 5
+            waitInterval: 5000
+            failureRateThreshold: 50
+----

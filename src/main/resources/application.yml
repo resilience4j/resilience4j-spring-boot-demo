@@ -8,6 +8,13 @@ server:
 management:
     contextPath: /management
     add-application-context-header: false
+    health:
+        db.enabled: false
+        diskspace.enabled: false
+
+endpoints:
+    health.mapping.DOWN: OK
+    health.mapping.OUT_OF_SERVICE : OK
 
 info:
     name: ${spring.application.name}
