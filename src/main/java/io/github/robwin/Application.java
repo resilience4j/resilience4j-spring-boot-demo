@@ -14,9 +14,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
-import java.util.Map;
-import java.util.Set;
-
 @SpringBootApplication
 @EnableConfigurationProperties
 public class Application {
@@ -47,11 +44,8 @@ public class Application {
 	@Bean
 	public EventConsumerRegistry<CircuitBreakerEvent> eventConsumerRegistry(CircuitBreakerProperties circuitBreakerProperties) {
 		EventConsumerRegistry<CircuitBreakerEvent> eventConsumerRegistry = new DefaultEventConsumerRegistry<>();
-		Set<Map.Entry<String, CircuitBreakerProperties.BackendProperties>> entries = circuitBreakerProperties.getBackends().entrySet();
-		for(Map.Entry<String, CircuitBreakerProperties.BackendProperties> entry : entries){
-			CircuitBreakerProperties.BackendProperties backendProperties = entry.getValue();
-			eventConsumerRegistry.createEventConsumer(entry.getKey(), backendProperties.getEventConsumerBufferSize());
-		}
+		circuitBreakerProperties.getBackends().entrySet().forEach(entry ->
+				eventConsumerRegistry.createEventConsumer(entry.getKey(), entry.getValue().getEventConsumerBufferSize()));
 		return eventConsumerRegistry;
 	}
 
