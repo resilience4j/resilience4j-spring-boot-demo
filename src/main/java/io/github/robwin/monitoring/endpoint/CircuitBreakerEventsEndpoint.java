@@ -17,8 +17,8 @@ package io.github.robwin.monitoring.endpoint;
 
 
 import io.github.robwin.circuitbreaker.event.CircuitBreakerEvent;
-import io.github.robwin.consumer.CircularEventConsumer;
-import io.github.robwin.monitoring.consumer.EventConsumerRegistry;
+import io.github.robwin.consumer.EventConsumer;
+import io.github.robwin.consumer.EventConsumerRegistry;
 import javaslang.collection.Seq;
 import org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter;
 import org.springframework.http.MediaType;
@@ -35,10 +35,10 @@ import java.util.Comparator;
 @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 public class CircuitBreakerEventsEndpoint extends EndpointMvcAdapter {
 
-    private final EventConsumerRegistry eventConsumerRegistry;
+    private final EventConsumerRegistry<CircuitBreakerEvent> eventConsumerRegistry;
 
     public CircuitBreakerEventsEndpoint(CircuitBreakerEndpoint circuitBreakerEndpoint,
-                                        EventConsumerRegistry eventConsumerRegistry) {
+                                        EventConsumerRegistry<CircuitBreakerEvent> eventConsumerRegistry) {
         super(circuitBreakerEndpoint);
         this.eventConsumerRegistry = eventConsumerRegistry;
     }
@@ -46,8 +46,8 @@ public class CircuitBreakerEventsEndpoint extends EndpointMvcAdapter {
     @RequestMapping(value = "events", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Seq<CircuitBreakerEventDTO> getAllCircuitBreakerEvents() {
-        return eventConsumerRegistry.getAllCircularEventConsumer()
-                .flatMap(CircularEventConsumer::getBufferedEvents)
+        return eventConsumerRegistry.getAllEventConsumer()
+                .flatMap(EventConsumer::getBufferedEvents)
                 .sorted(Comparator.comparing(CircuitBreakerEvent::getCreationTime))
                 .map(CircuitBreakerEventDTOFactory::createCircuitBreakerEventDTO);
     }
@@ -55,7 +55,7 @@ public class CircuitBreakerEventsEndpoint extends EndpointMvcAdapter {
     @RequestMapping(value = "events/{circuitBreakerName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Seq<CircuitBreakerEventDTO> getEventsFilteredByCircuitBreakerName(@PathVariable("circuitBreakerName") String circuitBreakerName) {
-        return eventConsumerRegistry.getCircularEventConsumer(circuitBreakerName).getBufferedEvents()
+        return eventConsumerRegistry.getEventConsumer(circuitBreakerName).getBufferedEvents()
                 .filter(event -> event.getCircuitBreakerName().equals(circuitBreakerName))
                 .map(CircuitBreakerEventDTOFactory::createCircuitBreakerEventDTO);
     }
@@ -64,7 +64,7 @@ public class CircuitBreakerEventsEndpoint extends EndpointMvcAdapter {
     @ResponseBody
     public Seq<CircuitBreakerEventDTO> getEventsFilteredByCircuitBreakerNameAndEventType(@PathVariable("circuitBreakerName") String circuitBreakerName,
                                                 @PathVariable("eventType") String eventType) {
-        return eventConsumerRegistry.getCircularEventConsumer(circuitBreakerName).getBufferedEvents()
+        return eventConsumerRegistry.getEventConsumer(circuitBreakerName).getBufferedEvents()
                 .filter(event -> event.getCircuitBreakerName().equals(circuitBreakerName))
                 .filter(event -> event.getEventType() == CircuitBreakerEvent.Type.valueOf(eventType.toUpperCase()))
                 .map(CircuitBreakerEventDTOFactory::createCircuitBreakerEventDTO);
