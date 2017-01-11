@@ -19,9 +19,8 @@ package io.github.robwin.monitoring.health;
 import io.github.robwin.circuitbreaker.CircuitBreaker;
 import io.github.robwin.circuitbreaker.CircuitBreakerConfig;
 import io.github.robwin.circuitbreaker.CircuitBreakerRegistry;
-import io.github.robwin.circuitbreaker.event.CircuitBreakerEvent;
 import io.github.robwin.config.CircuitBreakerProperties;
-import io.github.robwin.consumer.CircularEventConsumer;
+import io.github.robwin.monitoring.consumer.EventConsumerRegistry;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 
@@ -38,12 +37,12 @@ public class CircuitBreakerHealthIndicator implements HealthIndicator {
     private CircuitBreaker circuitBreaker;
 
     public CircuitBreakerHealthIndicator(CircuitBreakerRegistry circuitBreakerRegistry,
+                                         EventConsumerRegistry eventConsumerRegistry,
                                          CircuitBreakerProperties circuitBreakerProperties,
-                                         CircularEventConsumer<CircuitBreakerEvent> circuitBreakerEventConsumer,
                                          String backendName) {
-        this.circuitBreaker = circuitBreakerRegistry.circuitBreaker(backendName, () -> circuitBreakerProperties.circuitBreakerConfig(backendName));
+        this.circuitBreaker = circuitBreakerRegistry.circuitBreaker(backendName, () -> circuitBreakerProperties.createCircuitBreakerConfig(backendName));
         circuitBreaker.getEventStream()
-                .subscribe(circuitBreakerEventConsumer);
+                .subscribe(eventConsumerRegistry.getCircularEventConsumer(backendName));
     }
 
     @Override

@@ -27,19 +27,17 @@ import java.util.Map;
 @Component
 public class CircuitBreakerProperties {
 
-    private int eventBufferSize = 100;
-
     private Map<String, BackendProperties> backends = new HashMap<>();
 
     private BackendProperties getBackendProperties(String backend) {
         return backends.get(backend);
     }
 
-    public CircuitBreakerConfig circuitBreakerConfig(String backend) {
-        return circuitBreakerConfig(getBackendProperties(backend));
+    public CircuitBreakerConfig createCircuitBreakerConfig(String backend) {
+        return createCircuitBreakerConfig(getBackendProperties(backend));
     }
 
-    private CircuitBreakerConfig circuitBreakerConfig(BackendProperties backendProperties) {
+    private CircuitBreakerConfig createCircuitBreakerConfig(BackendProperties backendProperties) {
         if (backendProperties == null) {
             return CircuitBreakerConfig.ofDefaults();
         }
@@ -71,11 +69,101 @@ public class CircuitBreakerProperties {
         return backends;
     }
 
-    public int getEventBufferSize() {
-        return eventBufferSize;
+    /**
+     * Class storing property values for configuring {@link io.github.robwin.circuitbreaker.CircuitBreaker} instances.
+     */
+    public static class BackendProperties {
+
+        private Integer waitInterval;
+
+        private Integer failureRateThreshold;
+
+        private Integer ringBufferSizeInClosedState;
+
+        private Integer ringBufferSizeInHalfOpenState;
+
+        private Integer eventConsumerBufferSize = 100;
+
+
+        /**
+         * Returns the wait duration in seconds the CircuitBreaker will stay open, before it switches to half closed.
+         *
+         * @return the wait duration
+         */
+        public Integer getWaitInterval() {
+            return waitInterval;
+        }
+
+        /**
+         * Sets the wait duration in seconds the CircuitBreaker should stay open, before it switches to half closed.
+         *
+         * @param waitInterval the wait duration
+         */
+        public void setWaitInterval(Integer waitInterval) {
+            this.waitInterval = waitInterval;
+        }
+
+        /**
+         * Returns the failure rate threshold for the circuit breaker as percentage.
+         *
+         * @return the failure rate threshold
+         */
+        public Integer getFailureRateThreshold() {
+            return failureRateThreshold;
+        }
+
+        /**
+         * Sets the failure rate threshold for the circuit breaker as percentage.
+         *
+         * @param failureRateThreshold the failure rate threshold
+         */
+        public void setFailureRateThreshold(Integer failureRateThreshold) {
+            this.failureRateThreshold = failureRateThreshold;
+        }
+
+        /**
+         * Returns the ring buffer size for the circuit breaker while in closed state.
+         *
+         * @return the ring buffer size
+         */
+        public Integer getRingBufferSizeInClosedState() {
+            return ringBufferSizeInClosedState;
+        }
+
+        /**
+         * Sets the ring buffer size for the circuit breaker while in closed state.
+         *
+         * @param ringBufferSizeInClosedState the ring buffer size
+         */
+        public void setRingBufferSizeInClosedState(Integer ringBufferSizeInClosedState) {
+            this.ringBufferSizeInClosedState = ringBufferSizeInClosedState;
+        }
+
+        /**
+         * Returns the ring buffer size for the circuit breaker while in half open state.
+         *
+         * @return the ring buffer size
+         */
+        public Integer getRingBufferSizeInHalfOpenState() {
+            return ringBufferSizeInHalfOpenState;
+        }
+
+        /**
+         * Sets the ring buffer size for the circuit breaker while in half open state.
+         *
+         * @param ringBufferSizeInHalfOpenState the ring buffer size
+         */
+        public void setRingBufferSizeInHalfOpenState(Integer ringBufferSizeInHalfOpenState) {
+            this.ringBufferSizeInHalfOpenState = ringBufferSizeInHalfOpenState;
+        }
+
+        public Integer getEventConsumerBufferSize() {
+            return eventConsumerBufferSize;
+        }
+
+        public void setEventConsumerBufferSize(Integer eventConsumerBufferSize) {
+            this.eventConsumerBufferSize = eventConsumerBufferSize;
+        }
     }
 
-    public void setEventBufferSize(int eventBufferSize) {
-        this.eventBufferSize = eventBufferSize;
-    }
 }

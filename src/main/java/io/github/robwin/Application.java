@@ -2,9 +2,8 @@ package io.github.robwin;
 
 import com.fasterxml.jackson.databind.Module;
 import io.github.robwin.circuitbreaker.CircuitBreakerRegistry;
-import io.github.robwin.circuitbreaker.event.CircuitBreakerEvent;
 import io.github.robwin.config.CircuitBreakerProperties;
-import io.github.robwin.consumer.CircularEventConsumer;
+import io.github.robwin.monitoring.consumer.EventConsumerRegistry;
 import io.github.robwin.monitoring.health.CircuitBreakerHealthIndicator;
 import javaslang.jackson.datatype.JavaslangModule;
 import org.springframework.boot.SpringApplication;
@@ -23,26 +22,21 @@ public class Application {
 
 	@Bean
 	public HealthIndicator backendA(CircuitBreakerRegistry circuitBreakerRegistry,
-									CircuitBreakerProperties circuitBreakerProperties,
-									CircularEventConsumer<CircuitBreakerEvent> circuitBreakerEventConsumer){
-		return new CircuitBreakerHealthIndicator(circuitBreakerRegistry, circuitBreakerProperties, circuitBreakerEventConsumer, "backendA");
+									EventConsumerRegistry eventConsumerRegistry,
+									CircuitBreakerProperties circuitBreakerProperties){
+		return new CircuitBreakerHealthIndicator(circuitBreakerRegistry, eventConsumerRegistry, circuitBreakerProperties, "backendA");
 	}
 
 	@Bean
 	public HealthIndicator backendB(CircuitBreakerRegistry circuitBreakerRegistry,
-									CircuitBreakerProperties circuitBreakerProperties,
-									CircularEventConsumer<CircuitBreakerEvent> circuitBreakerEventConsumer){
-		return new CircuitBreakerHealthIndicator(circuitBreakerRegistry, circuitBreakerProperties, circuitBreakerEventConsumer, "backendB");
+									EventConsumerRegistry eventConsumerRegistry,
+									CircuitBreakerProperties circuitBreakerProperties){
+		return new CircuitBreakerHealthIndicator(circuitBreakerRegistry, eventConsumerRegistry, circuitBreakerProperties, "backendB");
 	}
 
 	@Bean
 	public CircuitBreakerRegistry circuitBreakerRegistry() {
 		return CircuitBreakerRegistry.ofDefaults();
-	}
-
-	@Bean
-	public CircularEventConsumer<CircuitBreakerEvent> circuitBreakerEventConsumer(CircuitBreakerProperties circuitBreakerProperties) {
-		return new CircularEventConsumer<>(circuitBreakerProperties.getEventBufferSize());
 	}
 
 	@Bean

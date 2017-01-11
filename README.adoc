@@ -96,16 +96,18 @@ circuitbreaker:
             ringBufferSizeInHalfOpenState: 3
             waitInterval: 5000
             failureRateThreshold: 50
+            eventConsumerBufferSize: 10
         backendB:
             ringBufferSizeInClosedState: 10
             ringBufferSizeInHalfOpenState: 5
             waitInterval: 5000
             failureRateThreshold: 50
+            eventConsumerBufferSize: 10
 ----
 
 == CircuitBreaker Event Monitoring
 
-CircuitBreaker events are stored in a circular buffer which stores by default the latest 100 events. The size of the circular buffer is configurable.
+The emitted CircuitBreaker are stored in a circular event consumer buffer per CircuitBreaker instance. The size of the event consumer buffers are configurable.
 The demo adds a custom Spring Boot Actuator endpoint which can be used to monitor the emitted events of your CircuitBreakers.
 The endpoint `/management/circuitbreaker` lists the names of all CircuitBreaker instances.
 For example:

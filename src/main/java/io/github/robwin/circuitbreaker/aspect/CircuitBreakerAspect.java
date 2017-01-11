@@ -65,7 +65,7 @@ public class CircuitBreakerAspect {
 
     private io.github.robwin.circuitbreaker.CircuitBreaker getOrCreateCircuitBreaker(String methodName, String backend) {
         io.github.robwin.circuitbreaker.CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker(backend,
-                () -> circuitBreakerProperties.circuitBreakerConfig(backend));
+                () -> circuitBreakerProperties.createCircuitBreakerConfig(backend));
 
         if (logger.isDebugEnabled()) {
             logger.debug("Created or retrieved circuit breaker '{}' with failure rate '{}' and wait interval'{}' for method: '{}'",

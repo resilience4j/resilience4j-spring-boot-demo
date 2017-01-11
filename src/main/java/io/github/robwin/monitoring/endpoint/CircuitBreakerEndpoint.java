@@ -19,14 +19,20 @@ import io.github.robwin.circuitbreaker.CircuitBreaker;
 import io.github.robwin.circuitbreaker.CircuitBreakerRegistry;
 import javaslang.collection.Seq;
 import org.springframework.boot.actuate.endpoint.AbstractEndpoint;
+import org.springframework.boot.actuate.endpoint.Endpoint;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 
 /**
- * Endpoint which lists all CircuitBreaker events.
+ * {@link Endpoint} to expose CircuitBreaker events.
  *
- **/
+ * @author Dave Syer
+ * @author Meang Akira Tanaka
+ * @author Stephane Nicoll
+ */
+@ConfigurationProperties(prefix = "endpoints.circuitbreaker")
 @Component
 public class CircuitBreakerEndpoint extends AbstractEndpoint {
 
