@@ -42,11 +42,8 @@ public class Application {
 	}
 
 	@Bean
-	public EventConsumerRegistry<CircuitBreakerEvent> eventConsumerRegistry(CircuitBreakerProperties circuitBreakerProperties) {
-		EventConsumerRegistry<CircuitBreakerEvent> eventConsumerRegistry = new DefaultEventConsumerRegistry<>();
-		circuitBreakerProperties.getBackends().entrySet().forEach(entry ->
-				eventConsumerRegistry.createEventConsumer(entry.getKey(), entry.getValue().getEventConsumerBufferSize()));
-		return eventConsumerRegistry;
+	public EventConsumerRegistry<CircuitBreakerEvent> eventConsumerRegistry() {
+		return new DefaultEventConsumerRegistry<>();
 	}
 
 	@Bean

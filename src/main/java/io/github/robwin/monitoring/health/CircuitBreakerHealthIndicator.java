@@ -43,7 +43,8 @@ public class CircuitBreakerHealthIndicator implements HealthIndicator {
                                          String backendName) {
         this.circuitBreaker = circuitBreakerRegistry.circuitBreaker(backendName, () -> circuitBreakerProperties.createCircuitBreakerConfig(backendName));
         circuitBreaker.getEventStream()
-                .subscribe(eventConsumerRegistry.getEventConsumer(backendName));
+                .subscribe(eventConsumerRegistry.createEventConsumer(backendName,
+                        circuitBreakerProperties.getBackends().get(backendName).getEventConsumerBufferSize()));
     }
 
     @Override
