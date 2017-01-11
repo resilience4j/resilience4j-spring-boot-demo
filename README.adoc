@@ -107,7 +107,7 @@ circuitbreaker:
 
 == CircuitBreaker Event Monitoring
 
-The emitted CircuitBreaker are stored in a circular event consumer buffer per CircuitBreaker instance. The size of the event consumer buffers are configurable.
+The emitted CircuitBreaker events are stored in a separate circular event consumer buffers. The size of the event consumer buffers are configurable.
 The demo adds a custom Spring Boot Actuator endpoint which can be used to monitor the emitted events of your CircuitBreakers.
 The endpoint `/management/circuitbreaker` lists the names of all CircuitBreaker instances.
 For example:
