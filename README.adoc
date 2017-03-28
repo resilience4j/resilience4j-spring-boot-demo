@@ -2,9 +2,25 @@
 
 This demo shows how to use the fault tolerance library https://github.com/resilience4j/resilience4j[Resilience4j] in a Spring Boot application.
 
+== Gradle
+
+Add the Spring Boot Starter of Resilience4j to your compile dependency:
+
+```
+repositories {
+	maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
+	mavenCentral()
+}
+
+
+dependencies {
+	compile('io.github.resilience4j:resilience4j-spring-boot:0.9.0-SNAPSHOT')
+}
+```
+
 == Spring AOP
 
-The demo shows how to use a custom Spring AOP Aspect `CircuitBreakerAspect` and a custom `CircuitBreaker` annotation to make your Spring Boot application more fault tolerant. You can either annotate a class in order to protect all public methods or just some specific methods.
+The demo shows how to use the `CircuitBreaker` annotation to make your Spring Boot application more fault tolerant. You can either annotate a class in order to protect all public methods or just some specific methods.
 For example:
 
 [source,java]
