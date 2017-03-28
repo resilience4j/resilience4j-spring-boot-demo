@@ -1,6 +1,6 @@
-= Spring Boot Demo of javaslang-circuitbreaker
+= Spring Boot Demo of Resilience4j
 
-This demo shows how to use the fault tolerance library https://github.com/RobWin/javaslang-circuitbreaker[javaslang-circuitbreaker] in a Spring Boot application.
+This demo shows how to use the fault tolerance library https://github.com/resilience4j/resilience4j[Resilience4j] in a Spring Boot application.
 
 == Spring AOP
 
@@ -88,8 +88,7 @@ You can configure your CircuitBreakers in Spring Boot's `application.yml` config
 For example
 
 ----
-circuitbreaker:
-    eventBufferSize: 100
+resilience4j.circuitbreaker:
     backends:
         backendA:
             ringBufferSizeInClosedState: 5
@@ -113,16 +112,20 @@ The endpoint `/management/circuitbreaker` lists the names of all CircuitBreaker 
 For example:
 
 ----
-[
-  "backendA",
-  "backendB"
-]
+{
+    "circuitBreakers": [
+      "backendA",
+      "backendB"
+    ]
+}
 ----
 
 The endpoint `/management/circuitbreaker/events` lists the latest 100 emitted events of all CircuitBreaker instances.
+The endpoint `/management/circuitbreaker/stream/events` streams emitted events of all CircuitBreaker instances using Server-Sent Events.
 
 ----
-[
+{
+"circuitBreakerEvents":[
   {
     "circuitBreakerName": "backendA",
     "type": "ERROR",
@@ -150,13 +153,16 @@ The endpoint `/management/circuitbreaker/events` lists the latest 100 emitted ev
     "durationInMs": 0
   }
 ]
+}
 ----
 
 The endpoint `/management/circuitbreaker/events/{circuitBreakerName}` lists the latest emitted events of a specific CircuitBreaker.
+The endpoint `/management/circuitbreaker/stream/events/{circuitBreakerName}` streams emitted events using Server-Sent Events.
 For example `/management/circuitbreaker/events/backendA`:
 
 ----
-[
+{
+"circuitBreakerEvents":[
   {
     "circuitBreakerName": "backendA",
     "type": "ERROR",
@@ -182,10 +188,12 @@ For example `/management/circuitbreaker/events/backendA`:
     "creationTime": "2017-01-10T15:39:22.780+01:00[Europe/Berlin]"
   }
 ]
+}
 ----
 
 You can even filter the list of  events.
 The endpoint `/management/circuitbreaker/events/{circuitBreakerName}/{eventType}` lists the filtered events.
+The endpoint `/management/circuitbreaker/stream/events/{circuitBreakerName}/{eventType}` streams emitted events using Server-Sent Events.
 Event types can be:
 
 * ERROR: A CircuitBreakerEvent which informs that an error has been recorded.
@@ -196,7 +204,8 @@ Event types can be:
 
 For example `/management/circuitbreaker/events/backendA/ERROR`:
 ----
-[
+{
+"circuitBreakerEvents":[
   {
     "circuitBreakerName": "backendA",
     "type": "ERROR",
@@ -212,6 +221,7 @@ For example `/management/circuitbreaker/events/backendA/ERROR`:
     "durationInMs": 0
   }
 ]
+}
 ----
 
 == License

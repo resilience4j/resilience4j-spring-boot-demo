@@ -1,18 +1,17 @@
 package io.github.robwin;
 
-import com.fasterxml.jackson.databind.Module;
-import io.github.robwin.circuitbreaker.CircuitBreakerRegistry;
-import io.github.robwin.circuitbreaker.event.CircuitBreakerEvent;
-import io.github.robwin.config.CircuitBreakerProperties;
-import io.github.robwin.consumer.DefaultEventConsumerRegistry;
-import io.github.robwin.consumer.EventConsumerRegistry;
-import io.github.robwin.monitoring.health.CircuitBreakerHealthIndicator;
-import javaslang.jackson.datatype.JavaslangModule;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
+import io.github.resilience4j.circuitbreaker.autoconfigure.CircuitBreakerProperties;
+import io.github.resilience4j.circuitbreaker.event.CircuitBreakerEvent;
+import io.github.resilience4j.circuitbreaker.monitoring.health.CircuitBreakerHealthIndicator;
+import io.github.resilience4j.consumer.EventConsumerRegistry;
 
 @SpringBootApplication
 @EnableConfigurationProperties
@@ -34,20 +33,5 @@ public class Application {
 									EventConsumerRegistry<CircuitBreakerEvent> eventConsumerRegistry,
 									CircuitBreakerProperties circuitBreakerProperties){
 		return new CircuitBreakerHealthIndicator(circuitBreakerRegistry, eventConsumerRegistry, circuitBreakerProperties, "backendB");
-	}
-
-	@Bean
-	public CircuitBreakerRegistry circuitBreakerRegistry() {
-		return CircuitBreakerRegistry.ofDefaults();
-	}
-
-	@Bean
-	public EventConsumerRegistry<CircuitBreakerEvent> eventConsumerRegistry() {
-		return new DefaultEventConsumerRegistry<>();
-	}
-
-	@Bean
-	public Module javaslangModule() {
-		return new JavaslangModule();
 	}
 }

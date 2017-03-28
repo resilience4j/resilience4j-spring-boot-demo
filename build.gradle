@@ -15,24 +15,21 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 
 jar {
-	baseName = 'javaslang-circuitbreaker-demo'
+	baseName = 'resilience4j-spring-boot-demo'
 	version = '0.0.1'
 }
 
 sourceCompatibility = 1.8
 
 repositories {
+	maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 	mavenCentral()
 	jcenter()
-	maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 }
 
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-web')
-	compile('org.springframework.boot:spring-boot-starter-aop')
-	compile("org.springframework.boot:spring-boot-starter-actuator")
-	compile('io.github.robwin:javaslang-circuitbreaker:0.8.1')
+	compile('io.github.resilience4j:resilience4j-spring-boot:0.9.0-SNAPSHOT')
 	compile("io.javaslang:javaslang-jackson:2.0.5")
 	compile("net.logstash.logback:logstash-logback-encoder:4.7")
 	testCompile('org.springframework.boot:spring-boot-starter-test')

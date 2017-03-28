@@ -1,12 +1,10 @@
 package io.github.robwin.service;
 
-import io.github.robwin.circuitbreaker.operator.CircuitBreakerOperator;
-import io.github.robwin.connnector.Connector;
-import javaslang.control.Try;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.concurrent.TimeUnit;
+import io.github.robwin.connnector.Connector;
+import javaslang.control.Try;
 
 @Service(value = "businessAService")
 public class BusinessAService implements BusinessService {

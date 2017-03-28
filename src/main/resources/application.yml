@@ -1,5 +1,5 @@
 spring:
-    application.name: javaslang-circuitbreaker-demo
+    application.name: resilience4j-demo
     jackson.serialization.indent_output: true
 
 server:
@@ -18,11 +18,11 @@ endpoints:
 
 info:
     name: ${spring.application.name}
-    description: javaslang-circuitbreaker demo
+    description: resilience4j demo
     environment: ${spring.profiles.active}
     version: 0.0.1
 
-circuitbreaker:
+resilience4j.circuitbreaker:
     backends:
         backendA:
             ringBufferSizeInClosedState: 5
