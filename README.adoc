@@ -100,7 +100,7 @@ For example:
 }
 ----
 
-When you want to publish CircuitBreaker endpoints on the Metrics endpoint, you can add `resilience4j-metrics` to publish metrics with Dropwizard Metrics.
+When you want to publish CircuitBreaker metrics on the Metrics endpoint, you can add `resilience4j-metrics` to register metrics in a Dropwizard Metrics Registry.
 For example:
 
 [source,json]
