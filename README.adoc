@@ -119,6 +119,33 @@ For example:
 }
 ----
 
+When you want to publish CircuitBreaker endpoints on the Prometheus endpoint, you have to add the optional module `resilience4j-prometheus`.
+For example:
+
+[source]
+----
+# HELP circuit_breaker_calls Circuit Breaker Call Stats
+# TYPE circuit_breaker_calls gauge
+circuit_breaker_calls{name="backendB",call_result="successful",} 0.0
+circuit_breaker_calls{name="backendB",call_result="failed",} 0.0
+circuit_breaker_calls{name="backendB",call_result="not_permitted",} 0.0
+circuit_breaker_calls{name="backendB",call_result="buffered",} 0.0
+circuit_breaker_calls{name="backendB",call_result="buffered_max",} 10.0
+circuit_breaker_calls{name="backendA",call_result="successful",} 0.0
+circuit_breaker_calls{name="backendA",call_result="failed",} 0.0
+circuit_breaker_calls{name="backendA",call_result="not_permitted",} 0.0
+circuit_breaker_calls{name="backendA",call_result="buffered",} 0.0
+circuit_breaker_calls{name="backendA",call_result="buffered_max",} 5.0
+# HELP circuit_breaker_states Circuit Breaker States
+# TYPE circuit_breaker_states gauge
+circuit_breaker_states{name="backendB",state="closed",} 1.0
+circuit_breaker_states{name="backendB",state="open",} 0.0
+circuit_breaker_states{name="backendB",state="half_open",} 0.0
+circuit_breaker_states{name="backendA",state="closed",} 1.0
+circuit_breaker_states{name="backendA",state="open",} 0.0
+circuit_breaker_states{name="backendA",state="half_open",} 0.0
+----
+
 == Configuration
 
 You can configure your CircuitBreakers in Spring Boot's `application.yml` config file.

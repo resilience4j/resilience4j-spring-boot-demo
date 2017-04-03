@@ -18,8 +18,14 @@ import io.github.resilience4j.circuitbreaker.event.CircuitBreakerEvent;
 import io.github.resilience4j.circuitbreaker.monitoring.health.CircuitBreakerHealthIndicator;
 import io.github.resilience4j.consumer.EventConsumerRegistry;
 import io.github.resilience4j.metrics.CircuitBreakerMetrics;
+import io.github.resilience4j.prometheus.CircuitBreakerExports;
+import io.prometheus.client.CollectorRegistry;
+import io.prometheus.client.spring.boot.EnablePrometheusEndpoint;
+import io.prometheus.client.spring.boot.EnableSpringBootMetricsCollector;
 
 @SpringBootApplication
+@EnableSpringBootMetricsCollector
+@EnablePrometheusEndpoint
 @EnableConfigurationProperties
 public class Application {
 
@@ -28,6 +34,8 @@ public class Application {
 
 	@Autowired
 	CircuitBreakerRegistry circuitBreakerRegistry;
+
+	@Autowired
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
@@ -50,5 +58,6 @@ public class Application {
 	@PostConstruct
 	public void registerCircuitBreakerMetrics(){
 		metricRegistry.registerAll(CircuitBreakerMetrics.of(circuitBreakerRegistry));
+		CollectorRegistry.defaultRegistry.register(CircuitBreakerExports.ofCircuitBreakerRegistry(circuitBreakerRegistry));
 	}
 }

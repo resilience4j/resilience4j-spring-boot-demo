@@ -33,7 +33,9 @@ configurations.all {
 
 dependencies {
 	compile('io.github.resilience4j:resilience4j-spring-boot:0.9.0-SNAPSHOT')
-	compile('io.github.resilience4j:resilience4j-metrics:0.9.0-SNAPSHOT')
+	compile('io.github.resilience4j:resilience4j-metrics:0.9.0-SNAPSHOT') // Optional
+	compile('io.github.resilience4j:resilience4j-prometheus:0.9.0-SNAPSHOT') // Optional
+	compile('io.prometheus:simpleclient_spring_boot:0.0.21') // Optional
 	compile("io.javaslang:javaslang-jackson:2.0.5")
 	compile("net.logstash.logback:logstash-logback-encoder:4.7")
 	testCompile('org.springframework.boot:spring-boot-starter-test')
