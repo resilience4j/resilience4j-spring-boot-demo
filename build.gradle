@@ -26,10 +26,14 @@ repositories {
 	mavenCentral()
 	jcenter()
 }
+configurations.all {
+	resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
 
 
 dependencies {
 	compile('io.github.resilience4j:resilience4j-spring-boot:0.9.0-SNAPSHOT')
+	compile('io.github.resilience4j:resilience4j-metrics:0.9.0-SNAPSHOT')
 	compile("io.javaslang:javaslang-jackson:2.0.5")
 	compile("net.logstash.logback:logstash-logback-encoder:4.7")
 	testCompile('org.springframework.boot:spring-boot-starter-test')

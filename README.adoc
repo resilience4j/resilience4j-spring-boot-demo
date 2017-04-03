@@ -15,6 +15,7 @@ repositories {
 
 dependencies {
 	compile('io.github.resilience4j:resilience4j-spring-boot:0.9.0-SNAPSHOT')
+	compile('io.github.resilience4j:resilience4j-metrics:0.9.0-SNAPSHOT') // Optional
 }
 ```
 
@@ -82,6 +83,7 @@ For example:
     "failureRate": "60.0%",
     "failureRateThreshold": "50.0%",
     "maxBufferedCalls": 5,
+
     "bufferedCalls": 5,
     "failedCalls": 3,
     "notPermittedCalls": 0
@@ -95,6 +97,25 @@ For example:
     "failedCalls": 0,
     "notPermittedCalls": 0
   }
+}
+----
+
+When you want to publish CircuitBreaker endpoints on the Metrics endpoint, you can add `resilience4j-metrics` to publish metrics with Dropwizard Metrics.
+For example:
+
+[source,json]
+----
+{
+    "resilience4j.circuitbreaker.backendA.successful": 2,
+    "resilience4j.circuitbreaker.backendA.failed": 3,
+    "resilience4j.circuitbreaker.backendA.buffered": 5,
+    "resilience4j.circuitbreaker.backendA.buffered_max": 5,
+    "resilience4j.circuitbreaker.backendA.not_permitted": 7,
+    "resilience4j.circuitbreaker.backendB.successful": 0,
+    "resilience4j.circuitbreaker.backendB.failed": 0,
+    "resilience4j.circuitbreaker.backendB.buffered": 0,
+    "resilience4j.circuitbreaker.backendB.buffered_max": 10,
+    "resilience4j.circuitbreaker.backendB.not_permitted": 0
 }
 ----
 
