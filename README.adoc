@@ -16,6 +16,8 @@ repositories {
 dependencies {
 	compile('io.github.resilience4j:resilience4j-spring-boot:0.9.0-SNAPSHOT')
 	compile('io.github.resilience4j:resilience4j-metrics:0.9.0-SNAPSHOT') // Optional
+	compile('io.github.resilience4j:resilience4j-prometheus:0.9.0-SNAPSHOT') // Optional
+	compile('io.prometheus:simpleclient_spring_boot:0.0.21') // Optional
 }
 ```
 
