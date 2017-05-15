@@ -13,11 +13,16 @@ repositories {
 }
 
 
+ext{
+	resilience4jVersion = '0.9.0'
+}
+
 dependencies {
-	compile('io.github.resilience4j:resilience4j-spring-boot:0.9.0-SNAPSHOT')
-	compile('io.github.resilience4j:resilience4j-metrics:0.9.0-SNAPSHOT') // Optional
-	compile('io.github.resilience4j:resilience4j-prometheus:0.9.0-SNAPSHOT') // Optional
+	compile("io.github.resilience4j:resilience4j-spring-boot:${resilience4jVersion}")
+	compile("io.github.resilience4j:resilience4j-metrics:${resilience4jVersion}") // Optional
+	compile("io.github.resilience4j:resilience4j-prometheus:${resilience4jVersion}") // Optional
 	compile('io.prometheus:simpleclient_spring_boot:0.0.21') // Optional
+	compile("io.vavr:vavr-jackson:0.9.0")
 }
 ```
 
@@ -45,7 +50,7 @@ But you can still use a functional programming style. For example:
 public class BusinessBService implements BusinessService  {
 
     public Try<String> methodWithRecovery() {
-        Try.CheckedSupplier<String> backendFunction = CircuitBreaker.decorateCheckedSupplier(circuitBreaker, () -> backendBConnector.failure());
+        Supplier<String> backendFunction = CircuitBreaker.decorateSupplier(circuitBreaker, () -> backendBConnector.failure());
         return Try.of(backendFunction)
                 .recover((throwable) -> recovery(throwable));
     }
