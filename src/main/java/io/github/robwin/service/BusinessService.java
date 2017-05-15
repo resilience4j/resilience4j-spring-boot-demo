@@ -1,6 +1,7 @@
 package io.github.robwin.service;
 
-import javaslang.control.Try;
+
+import io.vavr.control.Try;
 
 public interface BusinessService {
     String failure();

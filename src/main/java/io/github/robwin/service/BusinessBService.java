@@ -1,18 +1,18 @@
 package io.github.robwin.service;
 
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
-import java.util.concurrent.TimeUnit;
-
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.github.resilience4j.circuitbreaker.autoconfigure.CircuitBreakerProperties;
 import io.github.resilience4j.circuitbreaker.operator.CircuitBreakerOperator;
 import io.github.robwin.connnector.Connector;
 import io.reactivex.Observable;
-import javaslang.control.Try;
+import io.vavr.control.Try;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 @Service(value = "businessBService")
 public class BusinessBService implements BusinessService  {
@@ -41,8 +41,8 @@ public class BusinessBService implements BusinessService  {
 
     @Override
     public Try<String> methodWithRecovery() {
-        Try.CheckedSupplier<String> backendFunction = CircuitBreaker.decorateCheckedSupplier(circuitBreaker, () -> backendBConnector.failure());
-        return Try.of(backendFunction)
+        Supplier<String> backendFunction = CircuitBreaker.decorateSupplier(circuitBreaker, () -> backendBConnector.failure());
+        return Try.ofSupplier(backendFunction)
                 .recover((throwable) -> recovery(throwable));
     }
 

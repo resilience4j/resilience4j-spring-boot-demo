@@ -1,10 +1,9 @@
 package io.github.robwin.service;
 
+import io.github.robwin.connnector.Connector;
+import io.vavr.control.Try;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-
-import io.github.robwin.connnector.Connector;
-import javaslang.control.Try;
 
 @Service(value = "businessAService")
 public class BusinessAService implements BusinessService {

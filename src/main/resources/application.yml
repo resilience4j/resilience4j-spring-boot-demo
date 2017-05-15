@@ -11,6 +11,7 @@ management:
     health:
         db.enabled: false
         diskspace.enabled: false
+    security.enabled: false
 
 endpoints:
     health.mapping.DOWN: OK
