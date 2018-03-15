@@ -16,20 +16,21 @@ apply plugin: 'org.springframework.boot'
 
 jar {
 	baseName = 'resilience4j-spring-boot-demo'
-	version = '0.11.0'
+	version = '0.12.1'
 }
 
 sourceCompatibility = 1.8
 
 repositories {
 	jcenter()
+	maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 }
 configurations.all {
 	resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
 ext{
-	resilience4jVersion = '0.11.0'
+	resilience4jVersion = '0.12.1'
 }
 
 
