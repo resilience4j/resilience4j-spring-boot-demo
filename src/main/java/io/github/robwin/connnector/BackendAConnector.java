@@ -12,7 +12,7 @@ import io.reactivex.Observable;
 /**
  * This Connector shows how to use the CircuitBreaker annotation.
  */
-@CircuitBreaker(backend = "backendA")
+@CircuitBreaker(name = "backendA")
 @Component(value = "backendAConnector")
 public class BackendAConnector implements Connector {
 

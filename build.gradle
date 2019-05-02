@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '1.5.9.RELEASE'
+		springBootVersion = '1.5.20.RELEASE'
 	}
 	repositories {
 		mavenCentral()
@@ -13,10 +13,11 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 
 jar {
 	baseName = 'resilience4j-spring-boot-demo'
-	version = '0.12.1'
+	version = '0.14.0'
 }
 
 sourceCompatibility = 1.8
@@ -30,21 +31,27 @@ configurations.all {
 }
 
 ext{
-	resilience4jVersion = '0.12.1'
+	resilience4jVersion = '0.15.0-SNAPSHOT'
+	microMeterVersion = '1.1.4'
 }
 
-
 dependencies {
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.boot:spring-boot-starter-actuator')
+	compile('org.springframework.boot:spring-boot-starter-aop')
+	compile('io.reactivex.rxjava2:rxjava:2.2.8')
+
+	compile("io.micrometer:micrometer-spring-legacy:${microMeterVersion}")
+	compile("io.micrometer:micrometer-registry-prometheus:${microMeterVersion}")
+
 	compile("io.github.resilience4j:resilience4j-spring-boot:${resilience4jVersion}")
-	compile("io.github.resilience4j:resilience4j-metrics:${resilience4jVersion}") // Optional
-	compile("io.github.resilience4j:resilience4j-prometheus:${resilience4jVersion}") // Optional
+	compile("io.github.resilience4j:resilience4j-micrometer:${resilience4jVersion}")
 	compile("io.github.resilience4j:resilience4j-rxjava2:${resilience4jVersion}") // Optional
-	compile('io.prometheus:simpleclient_spring_boot:0.0.21') // Optional
+
 	compile("io.vavr:vavr-jackson:0.9.1")
-	compile("net.logstash.logback:logstash-logback-encoder:4.7")
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '4.4'
+	gradleVersion = '4.6'
 }

@@ -3,7 +3,6 @@ package io.github.robwin.service;
 
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
-import io.github.resilience4j.circuitbreaker.autoconfigure.CircuitBreakerProperties;
 import io.github.resilience4j.circuitbreaker.operator.CircuitBreakerOperator;
 import io.github.robwin.connnector.Connector;
 import io.reactivex.Observable;
@@ -18,35 +17,41 @@ import java.util.function.Supplier;
 public class BusinessBService implements BusinessService  {
 
     private final Connector backendBConnector;
-    private final CircuitBreaker circuitBreaker;
+    private final CircuitBreakerRegistry circuitBreakerRegistry;
 
     public BusinessBService(@Qualifier("backendBConnector") Connector backendBConnector,
-                            CircuitBreakerRegistry circuitBreakerRegistry, CircuitBreakerProperties circuitBreakerProperties){
+                            CircuitBreakerRegistry circuitBreakerRegistry){
         this.backendBConnector = backendBConnector;
-        circuitBreaker = circuitBreakerRegistry.circuitBreaker("backendB", () -> circuitBreakerProperties.createCircuitBreakerConfig("backendB"));
+        this.circuitBreakerRegistry = circuitBreakerRegistry;
+
     }
 
     public String failure() {
+        CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker("backendB");
         return CircuitBreaker.decorateSupplier(circuitBreaker, backendBConnector::failure).get();
     }
 
     public String success() {
+        CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker("backendB");
         return CircuitBreaker.decorateSupplier(circuitBreaker, backendBConnector::success).get();
     }
 
     @Override
     public String ignore() {
+        CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker("backendB");
         return CircuitBreaker.decorateSupplier(circuitBreaker, backendBConnector::ignoreException).get();
     }
 
     @Override
     public Try<String> methodWithRecovery() {
+        CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker("backendB");
         Supplier<String> backendFunction = CircuitBreaker.decorateSupplier(circuitBreaker, () -> backendBConnector.failure());
         return Try.ofSupplier(backendFunction)
                 .recover((throwable) -> recovery(throwable));
     }
 
     public Observable<String> methodWhichReturnsAStream() {
+        CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker("backendB");
         return backendBConnector.methodWhichReturnsAStream()
                 .timeout(1, TimeUnit.SECONDS)
                 .lift(CircuitBreakerOperator.of(circuitBreaker));
