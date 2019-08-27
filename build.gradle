@@ -17,7 +17,7 @@ apply plugin: 'io.spring.dependency-management'
 
 jar {
 	baseName = 'resilience4j-spring-boot-demo'
-	version = '0.14.0'
+	version = '0.17.0'
 }
 
 sourceCompatibility = 1.8
@@ -31,7 +31,7 @@ configurations.all {
 }
 
 ext{
-	resilience4jVersion = '0.15.0-SNAPSHOT'
+	resilience4jVersion = '0.17'
 	microMeterVersion = '1.1.4'
 }
 
