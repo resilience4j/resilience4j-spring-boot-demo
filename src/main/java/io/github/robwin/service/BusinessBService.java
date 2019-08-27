@@ -54,7 +54,7 @@ public class BusinessBService implements BusinessService  {
         CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker("backendB");
         return backendBConnector.methodWhichReturnsAStream()
                 .timeout(1, TimeUnit.SECONDS)
-                .lift(CircuitBreakerOperator.of(circuitBreaker));
+                .compose(CircuitBreakerOperator.of(circuitBreaker));
     }
 
     private String recovery(Throwable throwable) {

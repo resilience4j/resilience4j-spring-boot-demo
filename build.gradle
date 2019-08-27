@@ -23,15 +23,16 @@ jar {
 sourceCompatibility = 1.8
 
 repositories {
-	jcenter()
-	maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
+	mavenCentral()
+	//jcenter()
+	//maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 }
 configurations.all {
 	resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
 ext{
-	resilience4jVersion = '0.17'
+	resilience4jVersion = '0.17.0'
 	microMeterVersion = '1.1.4'
 }
 
